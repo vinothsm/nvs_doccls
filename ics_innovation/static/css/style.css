@@ -1,0 +1,330 @@
+*{  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'titillium-web.regular', sans-serif;
+}
+
+body{
+  align-items: center;
+  justify-content: center;
+}
+
+.main-header {
+  margin-right: 68.5%;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 0;
+  line-height: 31px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.drag-drop-area {
+  border-radius: 5px;
+}
+
+.top-container{
+  display: flex;
+  margin-top: 45px;
+  margin-left: 25px;
+  margin-right: 20px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.upload-file {
+  display: flex;
+  margin-left: 25px;
+}
+
+
+.drag-drop-area .icon{
+  font-size: 100px;
+  color: #565252;
+}
+
+.drag-drop-area header{
+  font-size: 22px;
+  font-weight: 700;
+  opacity: 0.7;
+  color: #565252;
+  margin-left: 18px;
+  margin-top: 37px;
+}
+
+.drag-drop-area span{
+  font-size: 25px;
+  font-weight: 500;
+  color: #565252;
+  margin: 10px 0 15px 0;
+}
+
+.drag-drop-area button{
+  padding: 10px 25px;
+  font-size: 20px;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  /* background: #565252; */
+  color: #5256ad;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* .drag-drop-area img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}  */
+
+p{
+font-weight: bold;
+}
+
+.navbar{
+  overflow:hidden;
+  background-color: white;
+  height: 63px;
+
+}
+
+#upload_file {
+  cursor: pointer
+}
+
+.logout_img{
+  margin-top: -11px;
+  margin-top: 10px;
+  opacity: 0.5;
+  width: 25px;
+}
+
+.logo{
+  height: 27.57px;
+  width: 151px;
+  margin-top: -4px;
+  margin-left: 20px;
+}
+
+.top-container.rounded,.right-left-cont.rounded, .right-right-cont.rounded{
+  border-radius: 1.25rem!important;
+}
+
+.bg-light{
+  background-image: url('../img/backgroun_img.PNG');
+}
+
+.upd_img{
+  width: 81px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#extract_btn,#submit_btn{
+  background: #096AB4;
+  color: white;
+  margin-top: 28px;
+  width: 178px;
+  height: 50px;
+  border-radius: 23px;
+  font-size: 22px;
+}
+
+.btn:focus{
+outline: none;
+box-shadow: none;
+}
+
+#submit_btn{
+float: right;
+margin-right: 40px;
+height: 49px;
+width: 167px !important;
+}
+
+
+::-webkit-scrollbar {
+width: 5px;
+}
+
+::-webkit-scrollbar-track {
+background: rgba(255, 255, 255, 0);
+}
+
+::-webkit-scrollbar-thumb {
+background: #D2D2D2; 
+border-radius: 22px;
+height:1px
+}
+
+::-webkit-scrollbar-thumb:hover {
+background: #D2D2D2; 
+}
+
+
+#extract_btn:focus,#submit_btn:focus{
+outline: 2px solid darkblue;
+box-shadow: 2px solid darkblue;
+}
+
+
+#extract_btn,#submit_btn{
+width: 215px;
+}
+.container-header{
+margin-left: 20px;
+margin-top: 18px;
+height: 24px;
+width: 168px;
+color: #000000;
+font-size: 16px;
+font-weight: bold;
+letter-spacing: 0;
+line-height: 24px;
+}
+
+.card.model-card,.card.model-card.selected{
+height: 220px;
+width: 407px;
+border-radius: 1.25rem!important;
+background-color: white;
+margin-right: 30px;
+margin-top: 30px;
+
+}
+
+.card.model-card.selected{
+background-color: #086BB5 !important;
+}
+
+.bottom-container{
+margin-top: 60px;
+margin-left: 25px;
+}
+
+.available-classifications{
+display: flex;
+overflow-y: scroll;
+overflow-x:hidden ;
+height: 250px;
+margin-top: -20px;
+}
+
+.avl-card-header,.avl-card-header.selected {
+height: 24px;
+width: 269px;
+color: #086BB5;
+font-size: 20px;
+font-weight: bold;
+letter-spacing: 0;
+line-height: 24px;
+text-align: center;
+margin-top: 45px;
+margin-left: 62px;
+}
+
+.avl-card-header.selected {
+color: white;
+
+}
+
+.btn.btn-card{
+height: 40px;
+width: 159px;
+margin-left: 28px;
+border-radius: 4px;
+
+}
+
+.avl-card-buttons{
+display: flex;
+margin-top: 82px;
+}
+
+.btn-card.btn-select{
+background-color: #EE9B30;
+color: white;
+}
+
+.btn-card.btn-details{
+border: 1px solid #EE9B30;
+background-color: #FFFFFF;
+}
+
+.modal-close{
+width: 27px;
+height: 27px;
+border-radius: 20px;
+margin-left: 190px;
+}
+
+.modal-content{
+height: 432px;
+width: 480px;
+border-radius: 14px;
+background-color: #FFFFFF;
+}
+
+.modal-heading{
+height: 31px;
+width: 188px;
+color: #000000;
+font-family: "titillium-web.regular";
+font-size: 20px;
+font-weight: bold;
+letter-spacing: 0;
+line-height: 31px;
+text-align: center;
+margin-left: 30px;
+}
+
+.modal-top{
+margin-top: 41px;
+}
+
+.card.details-card {
+box-sizing: border-box;
+height: 61px;
+width: 401px;
+border: 1px solid #E8EAF2;
+border-radius: 2px;
+background-color: #F8F9FF;
+box-shadow: 0 0 60px 0 rgba(0,0,0,0.04);
+margin-top: 10px;
+margin-left: 25px;
+text-align: center;
+}
+
+.details-modal{
+overflow-y: scroll;
+}
+
+.details-card-header {
+margin-top: 15px;
+}
+
+.file-name-header{
+overflow-y: scroll;
+overflow-x: scroll;
+}
+
+#extract_btn{
+  position: absolute;
+  right: 60px;
+}
+
+.cards-row{
+  margin-left: 0px;
+}
+
+/* .drag-area-header{
+  height: 107px;
+  overflow-y: scroll;
+} */
+
+.main-header a,.main-header a:hover{
+  color: black;
+  text-decoration: none;
+}

@@ -1,0 +1,43 @@
+{% extends "ui_index.html" %}
+{% load static %}
+{% block content %}
+<div class="preview-block" id="preview_block">
+    <div class="main-container">
+      <!--SECTION one -->
+      <div class="doc-review rounded shadow-sm">
+        <div class="preview-container">
+          <embed  
+        src="{% static link %}"
+        class='pdf-preview-canvas'>
+        </div>
+      </div>    
+    <!--SECTION TWO -->
+      <div class="entity-review rounded shadow-sm">
+        <div class='csv-block'>
+          <button class="btn csv_btn"><img src="{% static 'img/csv_img.PNG' %}" class="csv_img"/></button>
+          <a href='#' id='csv_download_file'>Download File</a>
+        </div>
+        <div class="entity-container">
+          <div class="entity-block">
+            {% for item in response %}
+            {% if forloop.counter == 1 %}
+            <div class="card preview-selected-documents selected" data-slected-class="{{ item.document }}">
+            {% else %}
+            <div class="card preview-selected-documents" data-slected-class="{{ item.document }}">
+            {% endif %}
+              <p class='entity-text-preview'>{{ item.document }}</p>
+              <p class='sub-text'>{{ item.classification }}</p>
+              <!-- <p class='description-text'>some txt here</p> -->
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'underscore/underscore-min.js' %}"></script>
+<script src="{% static 'js/preview.js' %}"></script>
+{% endblock %}
+

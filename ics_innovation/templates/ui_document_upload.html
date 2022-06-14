@@ -1,0 +1,61 @@
+{% extends "ui_index.html" %}
+{% load static %}
+{% block content %}
+<div class="extract-entities-block" id="extract_entities_block">
+  <!--SECTION one -->
+  <form enctype="multipart/form-data" method="post" action="/review/">
+    {% csrf_token %}
+    <div class="top-container rounded shadow-sm">
+      <div class="drag-drop-area d-flex">
+        <div class="">
+          <button class="btn cursor-pointer" type="button"><img src="../static/img/upload_img.PNG" class="upd_img"/></button>
+        </div>
+        <div class="drag-area-header">
+          <header>Drag a Document/Click here to upload</header>
+        </div>
+        <div class="">
+          <button id="extract_btn" type="button">Upload</button>
+        </div>
+        <input type="file" name="media" hidden multiple>
+      </div>
+    </div>
+    <div class="bottom-container">
+      <p class='container-header'>Available Classifications</p>
+      <div class="available-classifications">
+        <div class="cards-row row">
+          <!-- card -->
+          {% for item in model_data %}
+          <div class="card model-card rounded shadow-sm column" data-class="{{item}}">
+            <header class="avl-card-header">{{item}}</header>
+            <div class="avl-card-buttons">
+              <button class="btn btn-card btn-select" type="button" data-class="{{item}}" >Select</button>
+              <button class="btn btn-card btn-details" type="button" data-toggle="modal" data-target="#detailsModal" data-class="{{item}}" >View Details</button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+  </div>
+    <input id="submit_btn" type="submit" class="btn" val="Submit"/>
+  </form>
+</div>
+
+  <!-- popup-model -->
+
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="d-flex modal-top">
+        <header class="modal-heading">List of Classifications</header>
+        <button type="button"  data-dismiss="modal" class="modal-close">X</button>
+      </div>
+      <div class="modal-body details-modal">
+        <div class="card-detils"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'underscore/underscore-min.js' %}"></script>
+<script src="{% static 'js/extract.js' %}"></script>
+{% endblock %}
