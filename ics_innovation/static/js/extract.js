@@ -38,7 +38,22 @@ $("body")
       update_html(html_content,'.card-detils')
       })
 })             
-
+.on("click", "#submit_btn", function (e) {
+  var text_msg=''
+  let file_val=$('input[name=media]').val()
+  if(file_val==''){
+    text_msg='Please select any File'
+  }
+  else if(!$('.model-input-tag').prop('checked') ){
+    text_msg='Please select any Modal'
+  }
+  else{
+    $('.validation-checkbox').prop('checked',true)
+  }
+  if(text_msg !=''){ 
+    $('#alert_limit').modal('show')
+    $('.modal-body').text(text_msg)}
+})
 
 function update_html(html_content,container,_url=''){
   $(container).html(html_content)

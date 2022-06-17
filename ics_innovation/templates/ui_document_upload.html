@@ -16,7 +16,7 @@
         <div class="">
           <button id="extract_btn" type="button">Upload</button>
         </div>
-        <input type="file" name="media" hidden multiple>
+        <input type="file" name="media" hidden multiple required>
       </div>
     </div>
     <div class="bottom-container">
@@ -24,6 +24,7 @@
       <div class="available-classifications">
         <div class="cards-row row">
           <!-- card -->
+           <input class="validation-checkbox" type="checkbox" required hidden >
           {% for item in model_data %}
           <div class="card model-card rounded shadow-sm column" data-class="{{item}}">
             <input class="model-input-tag" type="checkbox" name="entities" data-class="{{item}}" value="{{item}}">
