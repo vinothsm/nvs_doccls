@@ -260,7 +260,7 @@ border-radius: 20px;
 margin-left: 190px;
 }
 
-.modal-content{
+.modal-content-container{
 height: 432px;
 width: 480px;
 border-radius: 14px;
@@ -327,4 +327,29 @@ overflow-x: scroll;
 .main-header a,.main-header a:hover{
   color: black;
   text-decoration: none;
+}
+
+.model-input-tag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0px;
+    width: 0px;
+    background-color: #eee;
+}
+
+
+.modal-body{
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.modal-content{
+  width: 65%;
+}
+
+.modal-header{
+  border-bottom: 0px solid #dee2e6;
+  padding: 0rem 0.5rem;
 }

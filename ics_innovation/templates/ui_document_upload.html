@@ -3,7 +3,7 @@
 {% block content %}
 <div class="extract-entities-block" id="extract_entities_block">
   <!--SECTION one -->
-  <form enctype="multipart/form-data" method="post" action="/review/">
+  <form enctype="multipart/form-data" method="post" action="/">
     {% csrf_token %}
     <div class="top-container rounded shadow-sm">
       <div class="drag-drop-area d-flex">
@@ -26,6 +26,7 @@
           <!-- card -->
           {% for item in model_data %}
           <div class="card model-card rounded shadow-sm column" data-class="{{item}}">
+            <input class="model-input-tag" type="checkbox" name="entities" data-class="{{item}}" value="{{item}}">
             <header class="avl-card-header">{{item}}</header>
             <div class="avl-card-buttons">
               <button class="btn btn-card btn-select" type="button" data-class="{{item}}" >Select</button>
@@ -43,13 +44,28 @@
 
 <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div class="modal-content-container">
       <div class="d-flex modal-top">
         <header class="modal-heading">List of Classifications</header>
         <button type="button"  data-dismiss="modal" class="modal-close">X</button>
       </div>
       <div class="modal-body details-modal">
         <div class="card-detils"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="alert_limit" tabindex="-1" role="dialog" aria-labelledby="alert_limitLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        You can only select 5 Files
       </div>
     </div>
   </div>

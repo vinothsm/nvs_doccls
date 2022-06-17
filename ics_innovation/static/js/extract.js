@@ -21,6 +21,9 @@ $("body")
     $(`.card.model-card  .avl-card-header`).removeClass('selected')
     $(`.card.model-card[data-class='${selected_card}']`).addClass('selected')
     $(`.card.model-card[data-class='${selected_card}'] .avl-card-header`).addClass('selected')
+    $(`.model-input-tag`).prop('checked',false)
+    $(`.model-input-tag[data-class='${selected_card}']`).prop('checked',true)
+  
 })
 .on("click",".btn-card.btn-details", function(e) {
   let selected_card= this.attributes['data-class']['value']
@@ -79,25 +82,22 @@ function initalize_extract_view() {
     event.preventDefault(); //preventing from default behaviour
     //getting user select file and [0] this means if user select multiple files then we'll select only the first one
     fileList = event.dataTransfer.files;
-    showFile(); //calling function
+    
   });
 
   function showFile(){
-    let file_name=''
-    if(fileList.length>1){
-        let files=Object.values(fileList)
-        files.forEach(file => {
-            file_name=file_name+`<p>${file['name']}</p>`
-        })
+    if(fileList.length >5){
+      $('#alert_limit').modal('show')
+      fileList=[]
+      $('form :input').val('');
     }
     else{
-        file_name=fileList[0]['name']
-    }
-    let header_tag = `<header class="file-name-header">${file_name}</header>`; 
+    let file_name=fileList.length
+    let header_tag = `<header class="file-name-header">${file_name} document(s) uploded</header>`; 
     drag_drop_area.classList.add("active");
     dragText.innerHTML = header_tag; 
+      }
   }
-
 }
 
 
