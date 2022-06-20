@@ -24,7 +24,7 @@
       <div class="available-classifications">
         <div class="cards-row row">
           <!-- card -->
-           <input class="validation-checkbox" type="checkbox" required hidden >
+          <input class="validation-checkbox" type="checkbox" required hidden >
           {% for item in model_data %}
           <div class="card model-card rounded shadow-sm column" data-class="{{item}}">
             <input class="model-input-tag" type="checkbox" name="entities" data-class="{{item}}" value="{{item}}">

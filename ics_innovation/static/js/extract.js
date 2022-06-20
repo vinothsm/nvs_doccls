@@ -40,11 +40,18 @@ $("body")
 })             
 .on("click", "#submit_btn", function (e) {
   var text_msg=''
+  var modal_Checked=false
+  var modallist=$('.model-input-tag')
+  for(let i=0;i<modallist.length;i++){
+    if(modallist[i].checked){
+      modal_Checked=true
+    }
+  }
   let file_val=$('input[name=media]').val()
   if(file_val==''){
     text_msg='Please select any File'
   }
-  else if(!$('.model-input-tag').prop('checked') ){
+  else if(!modal_Checked){
     text_msg='Please select any Modal'
   }
   else{
