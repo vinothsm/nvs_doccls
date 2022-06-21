@@ -27,7 +27,9 @@ urlpatterns = [
     path("extracted_data/", views.get_extracted_data, name="review_page"),
     path("extracted_text/", views.get_extracted_text, name="review_page"),
     path("get_modal_details/", views.get_modal_details),
-    path("get_document/", views.get_document_preview_file)
+    path("get_document/", views.get_document_preview_file),
+    path("latest_req/", views.get_latest_req),
+    path("form/", views.get_form),
 
 ]
 
