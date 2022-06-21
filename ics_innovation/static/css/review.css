@@ -3,7 +3,7 @@
 }
 .doc-review.rounded, .entity-review.rounded{
   border-radius: 1.25rem!important;
-  height: 430px;
+  height: calc(100vh - 146px);
   background-color: white;
   margin-top: 51px;
 /* width: 480px; */
@@ -38,7 +38,7 @@ border: 1px solid #1175BE;
 
 .pdf-preview-canvas{
 width: 460px;
-height: 410px;
+height: calc(100vh - 165px);;
 margin-top: 10px;
 margin-left: 10px;
 

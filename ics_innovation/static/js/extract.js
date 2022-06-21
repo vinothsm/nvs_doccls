@@ -21,6 +21,9 @@ $("body")
     $(`.card.model-card  .avl-card-header`).removeClass('selected')
     $(`.card.model-card[data-class='${selected_card}']`).addClass('selected')
     $(`.card.model-card[data-class='${selected_card}'] .avl-card-header`).addClass('selected')
+    $(`.model-input-tag`).prop('checked',false)
+    $(`.model-input-tag[data-class='${selected_card}']`).prop('checked',true)
+  
 })
 .on("click",".btn-card.btn-details", function(e) {
   let selected_card= this.attributes['data-class']['value']
@@ -35,7 +38,29 @@ $("body")
       update_html(html_content,'.card-detils')
       })
 })             
-
+.on("click", "#submit_btn", function (e) {
+  var text_msg=''
+  var modal_Checked=false
+  var modallist=$('.model-input-tag')
+  for(let i=0;i<modallist.length;i++){
+    if(modallist[i].checked){
+      modal_Checked=true
+    }
+  }
+  let file_val=$('input[name=media]').val()
+  if(file_val==''){
+    text_msg='Please select any File'
+  }
+  else if(!modal_Checked){
+    text_msg='Please select any Modal'
+  }
+  else{
+    $('.validation-checkbox').prop('checked',true)
+  }
+  if(text_msg !=''){ 
+    $('#alert_limit').modal('show')
+    $('.modal-body').text(text_msg)}
+})
 
 function update_html(html_content,container,_url=''){
   $(container).html(html_content)
@@ -79,25 +104,22 @@ function initalize_extract_view() {
     event.preventDefault(); //preventing from default behaviour
     //getting user select file and [0] this means if user select multiple files then we'll select only the first one
     fileList = event.dataTransfer.files;
-    showFile(); //calling function
+    
   });
 
   function showFile(){
-    let file_name=''
-    if(fileList.length>1){
-        let files=Object.values(fileList)
-        files.forEach(file => {
-            file_name=file_name+`<p>${file['name']}</p>`
-        })
+    if(fileList.length >5){
+      $('#alert_limit').modal('show')
+      fileList=[]
+      $('form :input').val('');
     }
     else{
-        file_name=fileList[0]['name']
-    }
-    let header_tag = `<header class="file-name-header">${file_name}</header>`; 
+    let file_name=fileList.length
+    let header_tag = `<header class="file-name-header">${file_name} document(s) uploded</header>`; 
     drag_drop_area.classList.add("active");
     dragText.innerHTML = header_tag; 
+      }
   }
-
 }
 
 
