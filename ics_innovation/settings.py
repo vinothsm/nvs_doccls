@@ -15,8 +15,11 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-MEDIA_ROOT = os.path.join('ics_innovation/static/')
-MEDIA_URL = "files/"
+# MEDIA_ROOT = os.path.join(BASE_DIR,'ics_innovation/static/')
+# MEDIA_URL = "files/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'ics_innovation/static/')
+MEDIA_URL = "uploads/"
+
 
 NODE_PACKAGE_MANAGER_EXECUTABLE = "/opt/homebrew/bin/npm"
 NODE_MODULES_ROOT = str(BASE_DIR) +'/node_modules'

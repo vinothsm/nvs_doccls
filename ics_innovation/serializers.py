@@ -1,5 +1,5 @@
 from .models import OnlyFile
-from .models import OnlyRequest, FilesUploadedPerReq
+from .models import OnlyRequest, FilesUploadedPerReq,FileText
 from rest_framework import serializers
 
 class FileSerializer(serializers.ModelSerializer):
@@ -15,4 +15,9 @@ class RequestSerializer(serializers.ModelSerializer):
 class FilesUploadedPerReqSerializer(serializers.ModelSerializer):
     class Meta:
         model = FilesUploadedPerReq
+        fields = "__all__"
+
+class FileTextSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FileText
         fields = "__all__"

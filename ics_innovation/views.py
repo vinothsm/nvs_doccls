@@ -1,3 +1,4 @@
+import imp
 from django.http import FileResponse,JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -10,12 +11,13 @@ from django.conf import settings
 import shutil
 import os
 from pathlib import Path
-from .serializers import FileSerializer, RequestSerializer, FilesUploadedPerReqSerializer
-from .models import OnlyFile, FilesUploadedPerReq, OnlyRequest
+from .serializers import FileSerializer, RequestSerializer, FilesUploadedPerReqSerializer,FileTextSerializer
+from .models import OnlyFile, FilesUploadedPerReq, OnlyRequest,FileText
 from rest_framework.response import Response
 import json
-
-
+from django.core.files.storage import FileSystemStorage
+from . import settings
+from .extractor import get_fulltext_from_pdf
 env = "dev"
 doc_list= []
 selected_document_details={}
@@ -67,10 +69,21 @@ modal_classifications={
 
 @api_view(["GET"])
 def get_extracted_data(request):
-    json = []
+    if request.method == "GET":
+        req_object=OnlyRequest.objects.latest("created")
+        req_id = req_object.request_id
+        req_objs = FilesUploadedPerReq.objects.filter(req_id=req_id)
+        serializer = FilesUploadedPerReqSerializer(req_objs, many=True)
+        all_entries = json.loads(json.dumps(serializer.data))
+        op = []
+        for entry in all_entries:
+            
+            item = FileTextSerializer(FileText.objects.filter(file_id=entry['file_id']), many=True)
+            op.append(json.loads(json.dumps(item.data))[0])
+        return Response(data={'files':op,'entities':req_object.entities})
+
     if env == "dev":
-        json = [
-        ]
+        resp=[]
     if env == "prod":
         # latest_doc = EntityExtractorV1.objects.order_by("-pk")[0]
         # url = "http://localhost:8053/entities"
@@ -79,14 +92,15 @@ def get_extracted_data(request):
         #     "entities": latest_doc.entities
         # })
         # json = resp.json()
-        json = []
+        resp=[]
 
-    return Response({"data": json})
+    return Response({"data": []})
 
 @api_view(['GET'])
 def get_latest_req(request):
     if request.method == "GET":
-        req_id = OnlyRequest.objects.latest("created").request_id
+        req_object=OnlyRequest.objects.latest("created")
+        req_id = req_object.request_id
         req_objs = FilesUploadedPerReq.objects.filter(req_id=req_id)
         serializer = FilesUploadedPerReqSerializer(req_objs, many=True)
         all_entries = json.loads(json.dumps(serializer.data))
@@ -94,7 +108,7 @@ def get_latest_req(request):
         for entry in all_entries:
             item = FileSerializer(OnlyFile.objects.filter(file_id=entry['file_id']), many=True)
             op.append(json.loads(json.dumps(item.data))[0])
-        return Response(data=serializer.data)
+        return Response(data={'files':op,'entities':req_object.entities})
 
 
 
@@ -118,31 +132,45 @@ def get_document_preview_file(request):
 @api_view(["GET", "POST"])
 def upload_page(request):
     if request.method == "GET":
-        delete_all_files()
+        # delete_all_files()
         # context = {}
         context={'model_data':list(modal_classifications.keys())}
         return render(request, 'ui_document_upload.html', context=context)
     if request.method == "POST":
-        print('request.method',request.method)
-        request.POST._mutable = True
-        request.POST.update(
-            {"document": ",".join(request.POST.getlist("entities"))})
-        selected_modal=request.POST.getlist("entities")[0]
-        context={}
-        file_objs = request.data.getlist('media')
-        doc_list=[]
-        selected_document_details.clear()
-        for files in file_objs:
-            default_storage.save('files/'+files.name, ContentFile(files.read()))
-            doc_dict= {'document' :files.name, 'classification' :selected_modal}
-            doc_list.append(doc_dict)
-            selected_document_details[files.name]='/files/'+files.name
-        context={
-            "page": "preview",
-            "link": list(selected_document_details.values())[0],
-            "response": doc_list
-        }
-        return render(request, 'ui_preview_page.html', context=context)
+        urls_list = []
+        file_objs = []
+        modal_names=",".join(request.POST.getlist("entities"))
+        for myfile in request.FILES.getlist('media'):
+            # myfile = inmemory_obj.file
+            fs = FileSystemStorage() #defaults to   MEDIA_ROOT  
+            filename = fs.save(myfile.name.replace(" ", "_"), myfile)
+            file_url = fs.url(filename)
+            urls_list.append(file_url)
+            print(file_url)
+            file_serializer = FileSerializer(data={"file_path": file_url,'file_name':myfile.name,})
+            if(file_serializer.is_valid(raise_exception=True)):
+                print("valid one")
+                file_obj = file_serializer.save()
+                file_objs.append(file_obj)
+                file_=os.path.join(Path(__file__).parent, "static/"+filename)
+                file_text=get_fulltext_from_pdf(file_)
+                ft_serializer=FileTextSerializer(data={'file_id':file_obj.file_id,'file_text':file_text})
+                if(ft_serializer.is_valid(raise_exception=True)):
+                    ft_serializer.save()
+        req_serializer = RequestSerializer(data={'entities':modal_names})
+        req_obj = {}
+        if(req_serializer.is_valid(raise_exception=True)):
+            req_obj = req_serializer.save()
+        for file_obj in file_objs:
+            fupr_serializer = FilesUploadedPerReqSerializer(data={
+                "req_id": req_obj.request_id, "file_id": file_obj.file_id
+            })
+            if(fupr_serializer.is_valid(raise_exception=True)):
+                fupr_serializer.save()
+        # print(FilesUploadedPerReq.objects.get({"req_id": req_obj.request_id}))
+
+        return render(request, 'ui_preview_page_d1.html', {
+        })
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 def delete_all_files():
@@ -186,3 +214,10 @@ def get_form(request):
         })
     return render(request, "form.html", {"urls": []})
 
+def get_document_preview_file(request):
+    context={}
+    if request.method == "GET":
+        param = request.GET
+        document_name = param['document_name']
+        context['document_path']=selected_document_details[document_name]
+    return JsonResponse(context)

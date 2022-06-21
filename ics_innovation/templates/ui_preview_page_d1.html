@@ -1,0 +1,26 @@
+{% extends "ui_index.html" %}
+{% load static %}
+{% block content %}
+<div class="preview-block" id="preview_block">
+    <div class="main-container">
+      <!--SECTION one -->
+      <div class="doc-review rounded shadow-sm">
+        <div class="preview-container">
+        </div>
+      </div>    
+    <!--SECTION TWO -->
+      <div class="entity-review rounded shadow-sm">
+        <div class='csv-block'>
+          <button class="btn csv_btn"><img src="{% static 'img/csv_img.PNG' %}" class="csv_img"/></button>
+          <a href='#' id='csv_download_file'>Download File</a>
+        </div>
+        <div class="entity-container">
+      </div>
+    </div>
+</div>
+<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'underscore/underscore-min.js' %}"></script>
+<script src="{% static 'js/preview.js' %}"></script>
+{% endblock %}
+
