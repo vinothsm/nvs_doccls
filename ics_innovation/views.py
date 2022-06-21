@@ -195,8 +195,7 @@ def upload_page(request):
     if request.method == "GET":
         delete_all_files()
         # context = {}
-        context={'model_data':['Document Sensitivity Classification','BERT Classification','SCAI Classification'
-    ]}
+        context={'model_data':list(modal_classifications.keys())}
         return render(request, 'ui_document_upload.html', context=context)
     if request.method == "POST":
         print('request.method',request.method)
