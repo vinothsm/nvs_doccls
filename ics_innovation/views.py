@@ -17,6 +17,52 @@ from pathlib import Path
 env = "dev"
 doc_list= []
 selected_document_details={}
+modal_classifications={
+       'General Classification':['Clinical Reports',
+                                    'Communication',
+                                    'Contact Tracing',
+                                    'Diagnostics',
+                                    'Drug Targets',
+                                    'Education',
+                                    'Effect on Medical Specialties',
+                                    'Forecasting & Modelling',
+                                    'Health Policy',
+                                    'Healthcare Workers',
+                                    'Imaging',
+                                    'Immunology',
+                                    'Inequality',
+                                    'Infection Reports',
+                                    'Long Haul',
+                                    'Medical Devices',
+                                    'Misinformation',
+                                    'Model Systems & Tools',
+                                    'Molecular Biology',
+                                    'Non-human',
+                                    'Non-medical',
+                                    'Pediatrics',
+                                    'Prevalence',
+                                    'Prevention',
+                                    'Psychology',
+                                    'Recommendations',
+                                    'Risk Factors',
+                                    'Surveillance',
+                                    'Therapeutics',
+                                    'Transmission',
+                                    'Vaccines'],
+        'SCAI Classification':['Additional Monitoring Activity [Site Handover Form]',
+                                    'Checklist [Full Protocol Package (FPP)]',
+                                    'DSUR Report Body',
+                                    'Informed Consent Form',
+                                    'Investigators Brochure',
+                                    'Monitoring Visit Report',
+                                    'Pre Trial Monitoring Report',
+                                    'Protocol',
+                                    'Ready-to-Initiate-Sites (RIS) checklist',
+                                    'Study Table',
+                                    'Summary of Clinical Efficacy',
+                                    'Trial Initiation Monitoring Report']
+   }
+
 @api_view(["GET"])
 def get_extracted_data(request):
     json = []
@@ -106,8 +152,7 @@ def review_page(request):
 
 @api_view(["GET", "POST"])
 def doc_upload_page(request):
-    context={'model_data':['Document Sensitivity Classification','BERT Classification','SCAI Classification'
-    ]}
+    context={'model_data':list(modal_classifications.keys())}
     if request.method == "GET":
         return render(request, 'ui_document_upload.html', context=context)
     if request.method == "POST":
@@ -128,10 +173,7 @@ def doc_preview_page(request):
 
 
 def get_modal_details(request):
-   modal_classifications={'Document Sensitivity Classification':['Public Use','Business Use','Risticted','Confidential'],
-             'BERT Classification':['Public Use','Risticted','Confidential'],
-             'SCAI Classification':['Business Use','Risticted','Confidential']
-   }
+
    context={}
    if request.method == "GET":
         param = request.GET
