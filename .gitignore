@@ -102,3 +102,15 @@ dist
 
 # TernJS port file
 .tern-port
+__pycache__/
+**/__pycache__/
+**/**/__pycache__/
+*.pyc[cod]
+**/migrations/
+
+*.pdf
+node_modules/
+package-lock.json
+.DS_Store
+
+*.txt
