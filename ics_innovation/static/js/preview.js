@@ -19,31 +19,33 @@ function update_html(html_content,container,_url=''){
 }
   
 function preview_page_content(){
-    $.get('latest_req/',function(data){
-        var files=data['files']
-        var modal_name=data['entities']
-        var file=files[0]
-        let src=file['file_name']
-        let doc_html_content=`<embed  
-        src="/static/${src}"
-        class='pdf-preview-canvas'
-        >`
-        update_html(doc_html_content,'.preview-container')
-        modal_content=
-        `<div class="entity-block">`
-        for(let doc=0;doc<files.length;doc++){
-            if(doc==0){
-                modal_content=modal_content+`<div class="card preview-selected-documents selected" data-slected-class="${ files[doc]['file_name'] }">`
+    $.get('/extracted_data/',function(data){
+        var data=data['data'] || []
+        if(data.length){
+            let doc_html_content=`<embed  
+            src="/static/${data[0]["filename"]}"
+            class='pdf-preview-canvas'
+            >`
+            update_html(doc_html_content,'.preview-container')
+            modal_content=
+            `<div class="entity-block">`
+            for(let doc=0;doc<data.length;doc++){
+                if(doc==0){
+                    modal_content=modal_content+`<div class="card preview-selected-documents selected" data-slected-class="${ data[doc]['filename'] }">`
+                }
+                else{
+                    modal_content=modal_content+`<div class="card preview-selected-documents" data-slected-class="${ data[doc]['filename'] }">`
+                }
+                modal_content=modal_content+ `<p class='entity-text-preview'>${data[doc]['filename'] }</p>
+                <p class='sub-text'>${data[doc]['class']}</p>
+              </div>`
             }
-            else{
-                modal_content=modal_content+`<div class="card preview-selected-documents" data-slected-class="${ files[doc]['file_name'] }">`
-            }
-            modal_content=modal_content+ `<p class='entity-text-preview'>${files[doc]['file_name'] }</p>
-            <p class='sub-text'>${modal_name}</p>
-          </div>`
+            modal_content=modal_content+`</div>`
+            update_html(modal_content,'.entity-container')
+        } else {
+            update_html("Unable to fetch files",'.preview-container')
+            update_html("Unable to fetch response",'.entity-container')
         }
-        modal_content=modal_content+`</div>`
-        update_html(modal_content,'.entity-container')
 
     } )
     

@@ -18,7 +18,7 @@ import json
 from django.core.files.storage import FileSystemStorage
 from . import settings
 from .extractor import get_fulltext_from_pdf
-env = "dev"
+env = "prod"
 doc_list= []
 selected_document_details={}
 modal_classifications={
@@ -69,30 +69,30 @@ modal_classifications={
 
 @api_view(["GET"])
 def get_extracted_data(request):
-    if request.method == "GET":
-        req_object=OnlyRequest.objects.latest("created")
+    if env == "prod":
+        req_object = OnlyRequest.objects.latest("created")
         req_id = req_object.request_id
         req_objs = FilesUploadedPerReq.objects.filter(req_id=req_id)
         serializer = FilesUploadedPerReqSerializer(req_objs, many=True)
         all_entries = json.loads(json.dumps(serializer.data))
         op = []
         for entry in all_entries:
-            
             item = FileTextSerializer(FileText.objects.filter(file_id=entry['file_id']), many=True)
-            op.append(json.loads(json.dumps(item.data))[0])
-        return Response(data={'files':op,'entities':req_object.entities})
+            obj = json.loads(json.dumps(item.data))[0]
+            obj["model"] = req_object.entities
+            op.append(obj)
+        url = "http://10.185.56.168:8053/classification"
+        resp = req.post(url, json=op)
+        resp_json = resp.json()
+        for _file in resp_json:
+            item = FileSerializer(OnlyFile.objects.filter(file_id=_file["file_id"]), many=True)
+            _file["filename"] = json.loads(json.dumps(item.data))[0]["file_name"]
+
+
+        return Response(data={'data': resp_json})
 
     if env == "dev":
-        resp=[]
-    if env == "prod":
-        # latest_doc = EntityExtractorV1.objects.order_by("-pk")[0]
-        # url = "http://localhost:8053/entities"
-        # resp = req.post(url, json={
-        #     "input_text": latest_doc.extracted_text,
-        #     "entities": latest_doc.entities
-        # })
-        # json = resp.json()
-        resp=[]
+        return Response(data={'data': [{'class': 'Additional Monitoring Activity [Site Handover Form]', 'confidence': 0.22228756546974182, 'error': 'Success', 'model': 'SCAI', 'name_of_the_file': 'file_name', 'page_text': 'something'}, {'class': 'Comment/Editorial', 'confidence': 0.8513577230114553, 'error': 'Success', 'model': 'CORONA', 'name_of_the_file': 'file_name_2', 'page_text': 'text of the file 2'}]})
 
     return Response({"data": []})
 
@@ -172,6 +172,9 @@ def upload_page(request):
         return render(request, 'ui_preview_page_d1.html', {
         })
     return Response(status=status.HTTP_400_BAD_REQUEST)
+
+def get_preview(request):
+    return render(request, 'ui_preview_page_d1.html', {})
 
 def delete_all_files():
     file_folder_path=os.path.join(Path(__file__).parent, "static/files/")
