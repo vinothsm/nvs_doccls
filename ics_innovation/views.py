@@ -147,7 +147,7 @@ def upload_page(request):
             file_url = fs.url(filename)
             urls_list.append(file_url)
             print(file_url)
-            file_serializer = FileSerializer(data={"file_path": file_url,'file_name':myfile.name,})
+            file_serializer = FileSerializer(data={"file_path": file_url,'file_name':myfile.name.replace(" ", "_")})
             if(file_serializer.is_valid(raise_exception=True)):
                 print("valid one")
                 file_obj = file_serializer.save()
