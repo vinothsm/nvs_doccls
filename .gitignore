@@ -112,5 +112,6 @@ __pycache__/
 node_modules/
 package-lock.json
 .DS_Store
+db.sqlite3
 
 *.txt
