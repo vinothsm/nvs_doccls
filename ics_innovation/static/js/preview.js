@@ -21,6 +21,8 @@ function update_html(html_content,container,_url=''){
 function preview_page_content(){
     $.get('/extracted_data/',function(data){
         var data=data['data'] || []
+        var processed_data = []
+
         if(data.length){
             let doc_html_content=`<embed  
             src="/static/${data[0]["filename"]}"
@@ -39,15 +41,52 @@ function preview_page_content(){
                 modal_content=modal_content+ `<p class='entity-text-preview'>${data[doc]['filename'] }</p>
                 <p class='sub-text'>${data[doc]['class']}</p>
               </div>`
+
+              processed_data.push({
+                "Document": data[doc]['filename'],
+                "Classification": data[doc]['class']
+            })
             }
             modal_content=modal_content+`</div>`
+            const csvString = [
+                [
+                  "Document",
+                  "Classification"
+                ],
+                ...processed_data.map(item => [
+                    item.Document,
+                    item.Classification
+                ])
+              ]
+            .map(e => e.join(",")) 
+            .join("\n");
+            downloadCSV(csvString)
+            $(".loader").addClass("d-none")
+            $(".loader").removeClass("d-flex") 
             update_html(modal_content,'.entity-container')
         } else {
+            $(".loader").addClass("d-none")
+            $(".loader").removeClass("d-flex")
             update_html("Unable to fetch files",'.preview-container')
             update_html("Unable to fetch response",'.entity-container')
         }
-
+      
     } )
     
 }
-preview_page_content()
+
+
+function downloadCSV(csvStr) {
+    var hiddenElement = document.getElementById("csv_download_file");
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvStr);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'output.csv';
+    // hiddenElement.click();
+}
+
+
+$(function(){
+    $(".loader").removeClass("d-none")
+    $(".loader").addClass("d-flex")
+    preview_page_content()
+})
