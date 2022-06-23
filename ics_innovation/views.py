@@ -86,13 +86,13 @@ def get_extracted_data(request):
         resp_json = resp.json()
         for _file in resp_json:
             item = FileSerializer(OnlyFile.objects.filter(file_id=_file["file_id"]), many=True)
-            _file["filename"] = json.loads(json.dumps(item.data))[0]["file_name"]
+            _file["file_name"] = json.loads(json.dumps(item.data))[0]["file_name"]
 
 
         return Response(data={'data': resp_json})
 
     if env == "dev":
-        return Response(data={'data': [{'class': 'Additional Monitoring Activity [Site Handover Form]', 'confidence': 0.22228756546974182, 'error': 'Success', 'model': 'SCAI', 'name_of_the_file': 'file_name', 'page_text': 'something'}, {'class': 'Comment/Editorial', 'confidence': 0.8513577230114553, 'error': 'Success', 'model': 'CORONA', 'name_of_the_file': 'file_name_2', 'page_text': 'text of the file 2'}]})
+        return Response(data={'data': [{'class': 'Additional Monitoring Activity [Site Handover Form]', 'confidence': 0.22228756546974182, 'error': 'Success', 'model': 'SCAI', 'file_name': 'Document1.pdf', 'page_text': 'something'}, {'class': 'Comment/Editorial', 'confidence': 0.8513577230114553, 'error': 'Success', 'model': 'CORONA', 'file_name': 'Document3.pdf', 'page_text': 'text of the file 2'}]})
 
     return Response({"data": []})
 

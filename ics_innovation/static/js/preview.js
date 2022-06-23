@@ -25,7 +25,7 @@ function preview_page_content(){
 
         if(data.length){
             let doc_html_content=`<embed  
-            src="/static/${data[0]["filename"]}"
+            src="/static/${data[0]["file_name"]}"
             class='pdf-preview-canvas'
             >`
             update_html(doc_html_content,'.preview-container')
@@ -33,17 +33,17 @@ function preview_page_content(){
             `<div class="entity-block">`
             for(let doc=0;doc<data.length;doc++){
                 if(doc==0){
-                    modal_content=modal_content+`<div class="card preview-selected-documents selected" data-slected-class="${ data[doc]['filename'] }">`
+                    modal_content=modal_content+`<div class="card preview-selected-documents selected" data-slected-class="${ data[doc]['file_name'] }">`
                 }
                 else{
-                    modal_content=modal_content+`<div class="card preview-selected-documents" data-slected-class="${ data[doc]['filename'] }">`
+                    modal_content=modal_content+`<div class="card preview-selected-documents" data-slected-class="${ data[doc]['file_name'] }">`
                 }
-                modal_content=modal_content+ `<p class='entity-text-preview'>${data[doc]['filename'] }</p>
+                modal_content=modal_content+ `<p class='entity-text-preview'>${data[doc]['file_name'] }</p>
                 <p class='sub-text'>${data[doc]['class']}</p>
               </div>`
 
               processed_data.push({
-                "Document": data[doc]['filename'],
+                "Document": data[doc]['file_name'],
                 "Classification": data[doc]['class']
             })
             }
