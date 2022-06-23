@@ -85,6 +85,10 @@ font-size: 9px;
 .entity-text-preview{
 font-size: 12px;
 margin-top: 6px;
+text-overflow: ellipsis;
+word-break: break-all;
+overflow: hidden;
+white-space: nowrap;
 
 }
 
