@@ -38,7 +38,7 @@ function preview_page_content(){
                 else{
                     modal_content=modal_content+`<div class="card preview-selected-documents" data-slected-class="${ data[doc]['file_name'] }">`
                 }
-                modal_content=modal_content+ `<p class='entity-text-preview'>${data[doc]['file_name'] }</p>
+                modal_content=modal_content+ `<p class='entity-text-preview' title='${data[doc]['file_name'] }' >${data[doc]['file_name'] }</p>
                 <p class='sub-text'>${data[doc]['class']}</p>
               </div>`
 
