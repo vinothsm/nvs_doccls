@@ -1,4 +1,4 @@
-import imp
+from .convert_to_pdf import get_converted_file
 from django.http import FileResponse,JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -137,17 +137,19 @@ def upload_page(request):
         context={'model_data':list(modal_classifications.keys())}
         return render(request, 'ui_document_upload.html', context=context)
     if request.method == "POST":
-        urls_list = []
         file_objs = []
         modal_names=",".join(request.POST.getlist("entities"))
         for myfile in request.FILES.getlist('media'):
             # myfile = inmemory_obj.file
-            fs = FileSystemStorage() #defaults to   MEDIA_ROOT  
+            fs = FileSystemStorage() #defaults to   MEDIA_ROOT 
             filename = fs.save(myfile.name.replace(" ", "_"), myfile)
             file_url = fs.url(filename)
-            urls_list.append(file_url)
-            print(file_url)
-            file_serializer = FileSerializer(data={"file_path": file_url,'file_name':myfile.name.replace(" ", "_")})
+            file_ = os.path.join(Path(__file__).parent, "static/"+filename)
+            if(".docx" in filename):
+                file_ = get_converted_file(file_)
+                filename = filename.replace(".docx", ".pdf")
+                file_url = file_url.replace(".docx", ".pdf")
+            file_serializer = FileSerializer(data={"file_path": file_url,'file_name':filename})
             if(file_serializer.is_valid(raise_exception=True)):
                 print("valid one")
                 file_obj = file_serializer.save()

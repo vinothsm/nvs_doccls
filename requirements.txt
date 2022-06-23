@@ -5,3 +5,4 @@ fasttext
 pymupdf
 docx2txt
 django-node-assets
+docx2pdf
