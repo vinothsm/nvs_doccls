@@ -53,7 +53,7 @@ modal_classifications={
                                     'Therapeutics',
                                     'Transmission',
                                     'Vaccines'],
-        'SCAI Classification':['Additional Monitoring Activity [Site Handover Form]',
+        'Clinical Document Classification':['Additional Monitoring Activity [Site Handover Form]',
                                     'Checklist [Full Protocol Package (FPP)]',
                                     'DSUR Report Body',
                                     'Informed Consent Form',
@@ -92,7 +92,7 @@ def get_extracted_data(request):
         return Response(data={'data': resp_json})
 
     if env == "dev":
-        return Response(data={'data': [{'class': 'Additional Monitoring Activity [Site Handover Form]', 'confidence': 0.22228756546974182, 'error': 'Success', 'model': 'SCAI', 'file_name': 'Document1.pdf', 'page_text': 'something'}, {'class': 'Comment/Editorial', 'confidence': 0.8513577230114553, 'error': 'Success', 'model': 'CORONA', 'file_name': 'Document3.pdf', 'page_text': 'text of the file 2'}]})
+        return Response(data={'data': [{'class': 'Additional Monitoring Activity [Site Handover Form]', 'confidence': 0.22228756546974182, 'error': 'Success', 'model': 'Clinical Document Classification', 'file_name': 'Document1.pdf', 'page_text': 'something'}, {'class': 'Comment/Editorial', 'confidence': 0.8513577230114553, 'error': 'Success', 'model': 'CORONA', 'file_name': 'Document3.pdf', 'page_text': 'text of the file 2'}]})
 
     return Response({"data": []})
 
