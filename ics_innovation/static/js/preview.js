@@ -9,7 +9,7 @@ $("body").on("click", ".preview-selected-documents", function (e) {
 
 function preview_pdf(document_name) {
   let html_content = `<embed  
-    src="/static/${document_name}"
+    src="/static/${document_name}#view=fit"
     class='pdf-preview-canvas'
     >`;
   update_html(html_content, ".preview-container");
@@ -21,9 +21,19 @@ function update_html(html_content, container, _url = "") {
 
 function preview_page_content() {
   $.get("/extracted_data/", function (data) {
+    var Classification_summary=data['summary']
     var data = data["data"] || [];
     var processed_data = [];
-
+    var summury_data = [];
+    var count_data=0
+    for (var key in Classification_summary) {
+      count_data+=1
+      summury_data.push({
+        sno:count_data,
+        Classification: key,
+        Count: Classification_summary[key],
+      });
+    }
     if (data.length) {
       let doc_html_content = `<embed  
             src="/static/${data[0]["file_name"]}"
@@ -48,14 +58,20 @@ function preview_page_content() {
               </div>`;
 
         processed_data.push({
+          sno:doc,
           Document: data[doc]["file_name"],
           Classification: data[doc]["class"],
         });
       }
       modal_content = modal_content + `</div>`;
       const csvString = [
-        ["Document", "Classification"],
-        ...processed_data.map((item) => [item.Document, item.Classification]),
+        ["S.No","Classification", "Count"],
+        ...summury_data.map((item) => [item.sno,item.Classification, item.Count]),
+        ["","", ""],
+        ["","", ""],
+        ["","", ""],
+        ["S.No","Document", "Classification"],
+        ...processed_data.map((item) => [item.sno+1,item.Document, item.Classification]),
       ]
         .map((e) => e.join(","))
         .join("\n");

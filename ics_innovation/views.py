@@ -1,3 +1,4 @@
+from sklearn.metrics import classification_report
 from .convert_to_pdf import get_converted_file
 from django.http import FileResponse,JsonResponse
 from rest_framework.decorators import api_view
@@ -18,7 +19,7 @@ import json
 from django.core.files.storage import FileSystemStorage
 from . import settings
 from .extractor import get_fulltext_from_pdf
-env = "prod"
+env = "dev"
 doc_list= []
 selected_document_details={}
 modal_classifications={
@@ -76,10 +77,12 @@ def get_extracted_data(request):
         serializer = FilesUploadedPerReqSerializer(req_objs, many=True)
         all_entries = json.loads(json.dumps(serializer.data))
         op = []
+        modal_name=''
         for entry in all_entries:
             item = FileTextSerializer(FileText.objects.filter(file_id=entry['file_id']), many=True)
             obj = json.loads(json.dumps(item.data))[0]
             obj["model"] = req_object.entities
+            modal_name=obj["model"]
             op.append(obj)
         url = "http://10.185.56.168:8053/classification"
         resp = req.post(url, json=op)
@@ -87,12 +90,25 @@ def get_extracted_data(request):
         for _file in resp_json:
             item = FileSerializer(OnlyFile.objects.filter(file_id=_file["file_id"]), many=True)
             _file["file_name"] = json.loads(json.dumps(item.data))[0]["file_name"]
-
-
-        return Response(data={'data': resp_json})
+        
+        modal_classifications_list= modal_classifications[modal_name]
+        classification_count=dict.fromkeys(modal_classifications_list, 0)
+        for val_ in resp_json:
+            res_class=val_['class']
+            if res_class in classification_count.keys():
+                classification_count[res_class]+=1
+        return Response(data={'data': resp_json,'summary':classification_count})
 
     if env == "dev":
-        return Response(data={'data': [{'class': 'Additional Monitoring Activity [Site Handover Form]', 'confidence': 0.22228756546974182, 'error': 'Success', 'model': 'Clinical Document Classification', 'file_name': 'Document1.pdf', 'page_text': 'something'}, {'class': 'Comment/Editorial', 'confidence': 0.8513577230114553, 'error': 'Success', 'model': 'CORONA', 'file_name': 'Document3.pdf', 'page_text': 'text of the file 2'}]})
+        modal_name='Clinical Document Classification'
+        modal_classifications_list= modal_classifications[modal_name]
+        classification_count=dict.fromkeys(modal_classifications_list, 0)
+        resp_json= [{'class': 'Additional Monitoring Activity [Site Handover Form]', 'confidence': 0.22228756546974182, 'error': 'Success', 'model': 'Clinical Document Classification', 'file_name': 'Document1.pdf', 'page_text': 'something'}, {'class': 'Summary of Clinical Efficacy', 'confidence': 0.8513577230114553, 'error': 'Success', 'model': 'CORONA', 'file_name': 'Document3.pdf', 'page_text': 'text of the file 2'}]
+        for val_ in resp_json:
+            res_class=val_['class']
+            if res_class in classification_count.keys():
+                classification_count[res_class]+=1
+        return Response(data={'data':resp_json,'summary':classification_count})
 
     return Response({"data": []})
 
