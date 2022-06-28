@@ -19,7 +19,7 @@ import json
 from django.core.files.storage import FileSystemStorage
 from . import settings
 from .extractor import get_fulltext_from_pdf
-env = "dev"
+env = "prod"
 doc_list= []
 selected_document_details={}
 modal_classifications={
