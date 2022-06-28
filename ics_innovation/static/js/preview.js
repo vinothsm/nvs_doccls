@@ -9,9 +9,10 @@ $("body").on("click", ".preview-selected-documents", function (e) {
 
 function preview_pdf(document_name) {
   let html_content = `<embed  
-    src="/static/${document_name}#view=fit"
+    src="/static/${document_name}#view=fitH"
     class='pdf-preview-canvas'
     >`;
+    // #view=fitH
   update_html(html_content, ".preview-container");
 }
 
@@ -26,17 +27,10 @@ function preview_page_content() {
     var processed_data = [];
     var summury_data = [];
     var count_data=0
-    for (var key in Classification_summary) {
-      count_data+=1
-      summury_data.push({
-        sno:count_data,
-        Classification: key,
-        Count: Classification_summary[key],
-      });
-    }
+   
     if (data.length) {
       let doc_html_content = `<embed  
-            src="/static/${data[0]["file_name"]}"
+            src="/static/${data[0]["file_name"]}#view=fitH"
             class='pdf-preview-canvas'
             >`;
       update_html(doc_html_content, ".preview-container");
@@ -61,6 +55,18 @@ function preview_page_content() {
           sno:doc,
           Document: data[doc]["file_name"],
           Classification: data[doc]["class"],
+        });
+        if(Object.keys(Classification_summary).includes(data[doc]["class"]))
+        {
+          Classification_summary[data[doc]["class"]] += 1
+        }
+      }
+      for (var key in Classification_summary) {
+        count_data+=1
+        summury_data.push({
+          sno:count_data,
+          Classification: key,
+          Count: Classification_summary[key],
         });
       }
       modal_content = modal_content + `</div>`;

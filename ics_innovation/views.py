@@ -93,10 +93,6 @@ def get_extracted_data(request):
         
         modal_classifications_list= modal_classifications[modal_name]
         classification_count=dict.fromkeys(modal_classifications_list, 0)
-        for val_ in resp_json:
-            res_class=val_['class']
-            if res_class in classification_count.keys():
-                classification_count[res_class]+=1
         return Response(data={'data': resp_json,'summary':classification_count})
 
     if env == "dev":
@@ -104,10 +100,6 @@ def get_extracted_data(request):
         modal_classifications_list= modal_classifications[modal_name]
         classification_count=dict.fromkeys(modal_classifications_list, 0)
         resp_json= [{'class': 'Additional Monitoring Activity [Site Handover Form]', 'confidence': 0.22228756546974182, 'error': 'Success', 'model': 'Clinical Document Classification', 'file_name': 'Document1.pdf', 'page_text': 'something'}, {'class': 'Summary of Clinical Efficacy', 'confidence': 0.8513577230114553, 'error': 'Success', 'model': 'CORONA', 'file_name': 'Document3.pdf', 'page_text': 'text of the file 2'}]
-        for val_ in resp_json:
-            res_class=val_['class']
-            if res_class in classification_count.keys():
-                classification_count[res_class]+=1
         return Response(data={'data':resp_json,'summary':classification_count})
 
     return Response({"data": []})
