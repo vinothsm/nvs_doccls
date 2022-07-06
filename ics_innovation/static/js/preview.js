@@ -42,8 +42,9 @@ $("body")
                                           .remove()   //remove all the children
                                           .end()  //again go back to selected element
                                           .text()
-    preview_page_content(current_text)
-
+    if(current_text.trim()!=''){
+      preview_page_content(current_text)
+    }
 });
 
 
