@@ -17,7 +17,6 @@ from .models import OnlyFile, FilesUploadedPerReq, OnlyRequest,FileText
 from rest_framework.response import Response
 import json
 from django.core.files.storage import FileSystemStorage
-from . import settings
 from .extractor import get_fulltext_from_pdf
 env = "prod"
 doc_list= []
@@ -153,10 +152,10 @@ def upload_page(request):
             filename = fs.save(myfile.name.replace(" ", "_"), myfile)
             file_url = fs.url(filename)
             file_ = os.path.join(Path(__file__).parent, "static/"+filename)
-            if(".docx" in filename):
-                file_ = get_converted_file(file_)
-                filename = filename.replace(".docx", ".pdf")
-                file_url = file_url.replace(".docx", ".pdf")
+            # if(".docx" in filename):
+            #     file_ = get_converted_file(file_)
+            #     filename = filename.replace(".docx", ".pdf")
+            #     file_url = file_url.replace(".docx", ".pdf")
             file_serializer = FileSerializer(data={"file_path": file_url,'file_name':filename})
             if(file_serializer.is_valid(raise_exception=True)):
                 print("valid one")
