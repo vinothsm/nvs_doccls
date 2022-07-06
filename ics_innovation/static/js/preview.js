@@ -22,13 +22,26 @@ $("body")
     $(
       `.preview-selected-documents[data-slected-class='${selected_suggestion}']`
     ).toggleClass("selected");
-    $('.suggested_text').text(" "+selected_text)
+    $('.suggested_text').text(" "+selected_text.trim())
 })
 .on("click", '#btn_gts', function (e) {
     model_name='General Text Suggestions'
+    let current_text=$('#text_area_input').clone()    //clone the element
+                                          .children() //select all the children
+                                          .remove()   //remove all the children
+                                          .end()  //again go back to selected element
+                                          .text()
+    preview_page_content(current_text)
 })
 .on("click", '#btn_cts', function (e) {
     model_name='Clinical Text Suggestions'
+    let current_text=$('#text_area_input').clone()    //clone the element
+                                          .children() //select all the children
+                                          .remove()   //remove all the children
+                                          .end()  //again go back to selected element
+                                          .text()
+    preview_page_content(current_text)
+
 });
 
 
@@ -65,7 +78,7 @@ function preview_page_content(current_data) {
               $('#text_area_input').append(markup)
             }
             else{
-              $('.suggested_text').text(' '+txt_)
+              $('.suggested_text').text(' '+txt_.trim())
             }
           } 
           else {

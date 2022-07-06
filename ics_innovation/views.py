@@ -8,6 +8,11 @@ import os
 from pathlib import Path
 
 env='prod'
+url_dict={
+    'General Text Suggestions':"http://10.185.56.168:8053/intellitext_general",
+    'Clinical Text Suggestions':"http://10.185.56.168:8053/intellitext_abstracts"
+}
+
 suggestions=['suggestion1','suggestion2','''suggestion3  
     suggestion3 suggestion3 
     suggestion3 suggestion3
@@ -31,12 +36,13 @@ def get_suggestions(request):
     current_data=request.POST['current_data']
     if env=='prod':
         op_dict={'input_text':current_data}
-        url = "http://10.185.56.168:8053/intellitext"
+        url = url_dict[model_name]
         resp = req.post(url,json=op_dict)
         resp_json = resp.json()
+        # print('resp_json',resp_json)
         suggestions=[]
         for suggestion in resp_json:
-            if suggestion['text'] not in suggestions or suggestion['text'].strip() !='':
+            if suggestion['text'] not in suggestions and suggestion['text'].strip() !='':
                 suggestions.append(suggestion['text'])
 
     return JsonResponse( {'data':suggestions})
