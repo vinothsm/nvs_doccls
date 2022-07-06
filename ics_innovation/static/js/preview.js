@@ -56,15 +56,16 @@ function preview_page_content(current_data) {
             .remove()   //remove all the children
             .end()  //again go back to selected element
             .text()
+            let txt_=replace_txt
             if(replace_txt.slice(0,typed_text.trim().length).includes(typed_text.trim())){
-              replace_txt=replace_txt.slice(typed_text.trim().length)
+              txt_=replace_txt.slice(typed_text.trim().length)
             }
-            markup=`<span class='suggested_text'>  ${replace_txt}</span>`
+            markup=`<span class='suggested_text'>  ${txt_}</span>`
             if($('#text_area_input').find('span.suggested_text').length==0){
               $('#text_area_input').append(markup)
             }
             else{
-              $('.suggested_text').text(' '+replace_txt)
+              $('.suggested_text').text(' '+txt_)
             }
           } 
           else {
