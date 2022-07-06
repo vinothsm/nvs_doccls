@@ -108,21 +108,43 @@ function initalize_extract_view() {
   });
 
   function showFile(){
-    if(fileList.length >5){
+    var is_filetype_acceptable=check_file_type()
+    if(fileList.length >5 ){
       $('#alert_limit').modal('show')
       fileList=[]
-      $('form :input').val('');
+      $('form :input[name=media]').val('');
     }
     else{
-    let file_name=fileList.length
-    let header_tag = `<header class="file-name-header">${file_name} document(s) uploded</header>`; 
-    drag_drop_area.classList.add("active");
-    dragText.innerHTML = header_tag; 
+      if(is_filetype_acceptable){
+        let file_name=fileList.length
+        let header_tag = `<header class="file-name-header">${file_name} document(s) uploded</header>`; 
+        drag_drop_area.classList.add("active");
+        dragText.innerHTML = header_tag; }
+      else{
+        $('#alert_limit').modal('show')
+        $('form :input[name=media]').val('');
+        let text_msg='Please select valid file type'
+        $('.modal-body').text(text_msg)
       }
   }
 }
-
+}
 
 $(() => {
   initalize_extract_view()
 })
+
+
+function check_file_type(){
+    let validExtensions = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]; //adding some valid image extensions in array
+    for (let item in fileList) {
+      if(item!='length' && item!="item"){
+        let fileType = fileList[item].type; //getting selected file type
+      if ( !validExtensions.includes(fileType)  ) {
+        return false
+      }
+    }
+    }
+    return true
+
+}
