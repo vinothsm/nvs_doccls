@@ -1,0 +1,120 @@
+.main-container{
+  display: flex;
+}
+.doc-review.rounded, .entity-review.rounded{
+  border-radius: 1.25rem!important;
+  height: calc(100vh - 190px);
+  background-color: white;
+  margin-top: 25px;
+  
+/* width: 480px; */
+}
+.doc-review.rounded{
+ 
+/* width: 480px; */
+margin-right: 45px;
+margin-left: 35px;
+}
+.entity-review.rounded{
+  width: 764px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.card.preview-selected-documents,.card.preview-selected-documents.selected{
+Width: 351px;
+min-Height: 81px;
+margin-top: 11px;
+margin-left: 39.5px;
+background-color: #F8F9FF;
+border: #E8EAF2 solid 1px;
+cursor: pointer;
+box-shadow: 0 0 60px 0 rgba(0,0,0,0.04);
+}
+
+.card.preview-selected-documents.selected{
+background-color: #ffff;
+border: 1px solid #1175BE;
+
+}
+
+.pdf-preview-canvas{
+width: 460px;
+height: calc(100vh - 165px);;
+margin-top: 10px;
+margin-left: 10px;
+
+}
+.entity-container{
+/* margin-top: -100px; */
+overflow-y: auto;
+overflow-x: hidden;
+display: flex;
+}
+
+.sub-text ,.description-text,.entity-text-preview{
+text-align: left;
+margin-left: 15px;
+margin-bottom: 5px;
+font-weight: bold;
+}
+
+.sub-text {
+font-size: 15px;
+
+}
+.description-text{
+font-size: 9px;
+
+}
+
+.entity-text-preview{
+font-size: 12px;
+margin-top: 6px;
+}
+
+.text_area_{
+  margin-top: 5px;
+  /* width: 762px; */
+  margin-left: -5px;
+  height: calc(100vh - 201px);
+  /* border-radius: 20px; */
+  border-radius: 7px;
+  border: 1px solid black;
+  padding: 15px;
+  overflow: scroll;
+}
+.suggested_text{
+color: darkgray;
+}
+
+.nav-tabs {
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.tabs-bar {
+  margin-left: 35px;
+  margin-top: 25px;
+}
+
+.btn.tab-btn {
+  min-width: 150px;
+  border: 2px solid #103963;
+  background-color: white;
+  color: #103963;
+  border-radius: 22px;
+  margin-left: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 24px;
+  text-align: left;
+}
+
+.btn.tab-btn.active {
+  background-color: #103963;
+  color: white;
+}
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}

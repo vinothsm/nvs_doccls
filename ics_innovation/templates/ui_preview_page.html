@@ -1,0 +1,32 @@
+{% extends "ui_index.html" %}
+{% load static %}
+{% block content %}
+  <!--SECTION tabs -->
+  <div class="tabs-bar" data-toggle="buttons-radio">
+    <button name="tab-select" type="button" class="btn tab-btn" id="btn_gts">General Text Suggestions</button>
+    <button name="tab-select" type="button" class="btn tab-btn" id="btn_cts">Clinical Text Suggestions</button>
+  </div>
+<div class="preview-block" id="preview_block">
+    <div class="main-container">
+      <!--SECTION one -->
+      <div class="doc-review rounded shadow-sm col-7">
+        <div class="text-area-container">
+          <div name="text_area_input" id="text_area_input" class="text_area_" contenteditable="true">
+            <!-- <span class='suggested_text'></span> -->
+                 
+          </div>
+          <!-- <textarea name="text_area_input" id="text_area_input" class="text_area_"></textarea> -->
+        </div>
+      </div>    
+    <!--SECTION TWO -->
+      <div class="entity-review rounded shadow-sm col-4">
+        <div class="entity-container">
+      </div>
+    </div>
+</div>
+<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'underscore/underscore-min.js' %}"></script>
+<script src="{% static 'js/preview.js' %}"></script>
+{% endblock %}
+
