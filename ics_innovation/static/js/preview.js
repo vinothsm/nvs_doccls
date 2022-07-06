@@ -44,7 +44,7 @@ function preview_page_content(current_data) {
       for (let doc = 0; doc < data.length; doc++) {
         // var replace_txt=data[doc].slice(current_data.trim().length)
         var replace_txt=data[doc]
-        var symbol_less_text=replace_txt.replace(/[^a-zA-Z0-9 ]/g, '')
+        var symbol_less_text=replace_txt.replace(/[^a-zA-Z0-9 ]/g, ' ')
 
         if (doc == 0) {
           modal_content =

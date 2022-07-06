@@ -36,7 +36,7 @@ def get_suggestions(request):
         resp_json = resp.json()
         suggestions=[]
         for suggestion in resp_json:
-            if suggestion['text'] not in suggestions:
+            if suggestion['text'] not in suggestions or suggestion['text'].strip() !='':
                 suggestions.append(suggestion['text'])
 
     return JsonResponse( {'data':suggestions})
