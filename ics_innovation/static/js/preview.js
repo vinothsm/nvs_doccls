@@ -5,7 +5,7 @@ var aDemoItems =[{'Agegroup':'a','18-25':'b','25-34':'c','34-49':'d','>50':'e'},
 {'Agegroup':'a','18-25':'b','25-34':'c','34-49':'d','>50':'e'},{'Agegroup':'a','18-25':'b','25-34':'c','34-49':'d','>50':'e'},
 {'Agegroup':'a','18-25':'b','25-34':'c','34-49':'d','>50':'e'},{'Agegroup':'a','18-25':'b','25-34':'c','34-49':'d','>50':'e'}]
 $('body').on('click','#submit_parameters',function(e){
-    if( $('#frequency').val()!=='' && $('#no_of_drugs').val()!==''&& $('#drug_form').val()!==''&& $('#assesment_type').val()!==''&&$('#adverse_events').val()!==''&&$('#no_of_tests').val()!=='' ){
+    if( $('#trail_duriation').val()!=='' && $('#age_group').val()!==''&& $('#total_patient_enrollment').val()!==''&& $('#country').val()!==''&& $('#demographics').val()!==''&& $('#no_of_drugs').val()!=='' && $('#adverse_events').val()!=='' && $('#no_of_diseases').val()!==''){
         $('.table-container').removeClass('d-none')
         var table=$('#attrition-pridiction-table').DataTable({
             data:aDemoItems,

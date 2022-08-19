@@ -9,75 +9,76 @@
           <div class="parameters-form">
             <form  method="post" enctype="multipart/form-data">
               {% csrf_token %}
-              <div class="form-element d-flex  row ml-2">
-                <label for="number_of_years" class="col-sm-4 col-form-label">Number of Years</label>
+              <div class="form-element d-flex  row ml-2 mb-3">
+                <label for="trail_duriation" class="col-sm-4 col-form-label">Trail Duriation</label>
                 <div class="col-sm-7">
-                  <input type="text" class="form-control" name="number_of_years" id="number_of_years">
+                  <input type="number" class="form-control" name="trail_duriation" id="trail_duriation">
                 </div>
               </div>
-              <div class="form-element d-flex  row ml-2">
-                <label for="age_mean" class="col-sm-4 col-form-label">Age Mean</label>
+              <div class="form-element d-flex mb-2 row ml-2 mb-3">
+                <label for="age_group" class="col-sm-4 col-form-label">Age Groups</label>
                 <div class="col-sm-7">
-                  <input type="text" class="form-control" name="age_mean" id="age_mean">
-                </div>
-              </div>
-              <div class="form-element d-flex  row ml-2">
-                <label for="planned_enrollment" class="col-sm-4 col-form-label">Planned Enrollement</label>
-                <div class="col-sm-7">
-                  <input type="text" class="form-control" name="planned_enrollment" id="planned_enrollment">
-                </div>
-              </div>
-              <div class="form-element d-flex mb-2 row ml-2">
-                <label for="gdp_country_name" class="col-sm-4 col-form-label">GDP Country Name</label>
-                <div class="col-sm-7">
-                    <select class="selectpicker" name="gdp_country_name" id="gdp_country_name" title='Select Country' data-width="213px">
-                      <option>option1</option>
-                      <option>option2</option>
-                      <option>option3</option>
+                    <select class="selectpicker" name="age_group" id="age_group" title='Select Age Group' data-width="213px" multiple>
+                      <option value="18-25">18-25</option>
+                      <option value="26-35">26-35</option>
+                      <option value="36-45">36-45</option>
+                      <option value="45">>45</option>
                     </select>
                 </div>
               </div>
-              <div class="form-element d-flex  row ml-2">
-                <label for="asian_fraction" class="col-sm-4 col-form-label">Asian Fraction</label>
-                <div class="col-sm-7">
-                  <input type="text" class="form-control" name="asian_fraction" id="asian_fraction">
+              <div class="form-element d-flex  row ml-2 ">
+                <label for="total_patient_enrollment" class="col-sm-4 col-form-label">Total Patient Enrollement</label>
+                <div class="col-sm-7 mt-1">
+                  <input type="text" class="form-control" name="total_patient_enrollment" id="total_patient_enrollment">
                 </div>
               </div>
-              <div class="form-element d-flex  row ml-2">
-                <label for="native_fraction" class="col-sm-4 col-form-label">Navtive Fraction</label>
+              <div class="form-element d-flex mb-2 row ml-2 mb-3">
+                <label for="country" class="col-sm-4 col-form-label">Country</label>
                 <div class="col-sm-7">
-                  <input type="text" class="form-control" name="native_fraction" id="native_fraction">
+                    <select class="selectpicker" name="country" id="country" title='Select Country' data-width="213px" multiple>
+                      <option value="USA" >USA</option>
+                      <option value="Switzerland" >Switzerland</option>
+                      <option value="India" >India</option>
+                      <option value="Australia" >Australia</option>
+                      <option value="Netherlands" >Netherlands</option>
+                      <option value="Iceland" >Iceland</option>
+                      <option value="Italy" >Italy</option>
+                      <option value="United Kingdom" >United Kingdom</option>
+                    </select>
                 </div>
               </div>
-              <div class="form-element d-flex  row ml-2">
-                <label for="aa_fraction" class="col-sm-4 col-form-label">AA Fraction</label>
+              <div class="form-element d-flex mb-2 row ml-2 mb-3">
+                <label for="demographics" class="col-sm-4 col-form-label">Demographics</label>
                 <div class="col-sm-7">
-                  <input type="text" class="form-control" name="aa_fraction" id="aa_fraction">
-                </div>
-              </div>
-              <div class="form-element d-flex mb-2 row ml-2">
-                <label for="intervention_treatment_no_of_drugs" class="col-sm-4 col-form-label">Intervention Treatment No of Drugs</label>
-                <div class="col-sm-7">
-                    <select class=" selectpicker"  name="intervention_treatment_no_of_drugs" id="intervention_treatment_no_of_drugs" title='select No of Drugs' data-width="213px">
-                        <option>option1</option>
-                        <option>option2</option>
-                        <option>option3</option>
+                    <select class=" selectpicker"  name="demographics" id="demographics" title='select demographics' data-width="213px" multiple>
+                        <option>Asian Fraction</option>
+                        <option>Native Fraction</option>
+                        <option>African American Fraction</option>
                       </select>
                 </div>
               </div>
-              <div class="form-element d-flex  row ml-2">
-                <label for="ae_chest_pain" class="col-sm-4 col-form-label">AE Chest Pain</label>
+              <div class="form-element d-flex  row ml-2 mb-3">
+                <label for="no_of_drugs" class="col-sm-4 col-form-label">No of Drugs</label>
                 <div class="col-sm-7">
-                  <input type="text" class="form-control" name="ae_chest_pain" id="ae_chest_pain">
+                  <input type="number" class="form-control" name="no_of_drugs" id="no_of_drugs">
                 </div>
               </div>
-              <div class="form-element d-flex  row ml-2">
-                <label for="ae_respiratory_failure" class="col-sm-4 col-form-label">AE Respiratory Failure </label>
+              <div class="form-element d-flex mb-2 row ml-2 mb-3">
+                <label for="adverse_events" class="col-sm-4 col-form-label">Adverse Events</label>
                 <div class="col-sm-7">
-                  <input type="text" class="form-control" name="ae_respiratory_failure" id="ae_respiratory_failure">
+                    <select class=" selectpicker"  name="adverse_events" id="adverse_events" title='select No of Drugs' data-width="213px">
+                        <option>Chest pain</option>
+                        <option>Respiratory Failure</option>
+                      </select>
                 </div>
               </div>
-              <div class="form-element d-flex mb-2 row ml-2">
+              <div class="form-element d-flex  row ml-2 mb-3">
+                <label for="no_of_diseases" class="col-sm-4 col-form-label">No of Diseases</label>
+                <div class="col-sm-7">
+                  <input type="number" class="form-control" name="no_of_diseases" id="no_of_diseases">
+                </div>
+              </div>
+              <!-- <div class="form-element d-flex mb-2 row ml-2 mb-3">
                 <label for="no_of_diseases" class="col-sm-4 col-form-label">No of Diseses</label>
                 <div class="col-sm-7">
                     <select class=" selectpicker"  name="no_of_diseases" id="no_of_diseases" multiple data-live-search="true" title='select adverse events' data-width="213px">
@@ -86,7 +87,7 @@
                       <option data-tokens="option3">option3</option>
                     </select>
                 </div>
-              </div>
+              </div> -->
               <div class="submit-btn-container mt-2">
                 <button class="btn" type="button" id="submit_parameters"><img class="submit_img" src="{% static 'img/submit_img_.PNG' %}" alt="submit"></button>
               </div>
