@@ -1,0 +1,152 @@
+{% extends "ui_index.html" %}
+{% load static %}
+{% block content %}
+<div class="preview-block" id="preview_block">
+    <div class="main-container">
+      <div class="parameters-view rounded shadow-sm col-4">
+        <div class="trial-parameters-container ">
+          <p class='trial-parameters-header'>Trial Parameters</p>
+          <div class="parameters-form">
+            <form  method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-element d-flex  row ml-2">
+                <label for="number_of_years" class="col-sm-4 col-form-label">Number of Years</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" name="number_of_years" id="number_of_years">
+                </div>
+              </div>
+              <div class="form-element d-flex  row ml-2">
+                <label for="age_mean" class="col-sm-4 col-form-label">Age Mean</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" name="age_mean" id="age_mean">
+                </div>
+              </div>
+              <div class="form-element d-flex  row ml-2">
+                <label for="planned_enrollment" class="col-sm-4 col-form-label">Planned Enrollement</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" name="planned_enrollment" id="planned_enrollment">
+                </div>
+              </div>
+              <div class="form-element d-flex mb-2 row ml-2">
+                <label for="gdp_country_name" class="col-sm-4 col-form-label">GDP Country Name</label>
+                <div class="col-sm-7">
+                    <select class="selectpicker" name="gdp_country_name" id="gdp_country_name" title='Select Country' data-width="213px">
+                      <option>option1</option>
+                      <option>option2</option>
+                      <option>option3</option>
+                    </select>
+                </div>
+              </div>
+              <div class="form-element d-flex  row ml-2">
+                <label for="asian_fraction" class="col-sm-4 col-form-label">Asian Fraction</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" name="asian_fraction" id="asian_fraction">
+                </div>
+              </div>
+              <div class="form-element d-flex  row ml-2">
+                <label for="native_fraction" class="col-sm-4 col-form-label">Navtive Fraction</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" name="native_fraction" id="native_fraction">
+                </div>
+              </div>
+              <div class="form-element d-flex  row ml-2">
+                <label for="aa_fraction" class="col-sm-4 col-form-label">AA Fraction</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" name="aa_fraction" id="aa_fraction">
+                </div>
+              </div>
+              <div class="form-element d-flex mb-2 row ml-2">
+                <label for="intervention_treatment_no_of_drugs" class="col-sm-4 col-form-label">Intervention Treatment No of Drugs</label>
+                <div class="col-sm-7">
+                    <select class=" selectpicker"  name="intervention_treatment_no_of_drugs" id="intervention_treatment_no_of_drugs" title='select No of Drugs' data-width="213px">
+                        <option>option1</option>
+                        <option>option2</option>
+                        <option>option3</option>
+                      </select>
+                </div>
+              </div>
+              <div class="form-element d-flex  row ml-2">
+                <label for="ae_chest_pain" class="col-sm-4 col-form-label">AE Chest Pain</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" name="ae_chest_pain" id="ae_chest_pain">
+                </div>
+              </div>
+              <div class="form-element d-flex  row ml-2">
+                <label for="ae_respiratory_failure" class="col-sm-4 col-form-label">AE Respiratory Failure </label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" name="ae_respiratory_failure" id="ae_respiratory_failure">
+                </div>
+              </div>
+              <div class="form-element d-flex mb-2 row ml-2">
+                <label for="no_of_diseases" class="col-sm-4 col-form-label">No of Diseses</label>
+                <div class="col-sm-7">
+                    <select class=" selectpicker"  name="no_of_diseases" id="no_of_diseases" multiple data-live-search="true" title='select adverse events' data-width="213px">
+                      <option data-tokens="option1">option1</option>
+                      <option data-tokens="option2">option2</option>
+                      <option data-tokens="option3">option3</option>
+                    </select>
+                </div>
+              </div>
+              <div class="submit-btn-container mt-2">
+                <button class="btn" type="button" id="submit_parameters"><img class="submit_img" src="{% static 'img/submit_img_.PNG' %}" alt="submit"></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>    
+      <div class="right-view rounded shadow-sm col-7">
+        <div class="table-container mb-2 d-none">
+          <p class="table-result-header ml-2">Attrition by Age Group and Demographics</p>
+          <div class="table-filters d-flex">
+              <div class="row-selection">
+                  <label for="row" class="label ml-2">Row selection</label>
+                  <select class="selectpicker" name="row" id="row_drpdwn"  data-width="200px">
+                    <option>option1</option>
+                    <option>option2</option>
+                    <option>option3</option>
+                  </select>
+              </div>
+              <div class="col-selection">
+                  <label for="col" class="label ml-2">Column selection</label>
+                  <select class="selectpicker" name="col" id="col_drpdwn"   data-width="200px">
+                    <option>option1</option>
+                    <option>option2</option>
+                    <option>option3</option>
+                  </select>
+              </div>
+              <div class="csv_btn_container">
+                  <button class="btn csv_btn"><img src="{% static 'img/csv_img.PNG' %}" class="csv_img"/></button>
+                  <a href='#' id='csv_download_file'>Download File</a>
+              </div>
+          </div>
+          <div class="table-result mt-4 p-2">
+              <table id='attrition-pridiction-table' class="table table-striped table-bordered"></table>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="alert_limit" tabindex="-1" role="dialog" aria-labelledby="alert_limitLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="alert-popup-content modal-content">
+      <div class="alert-popup-header modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="alert-popup-body modal-body">
+        Please fill all the fields
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'underscore/underscore-min.js' %}"></script>
+<script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'bootstrap-select/dist/js/bootstrap-select.min.js' %}"></script>
+<script src="{% static 'datatables/media/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/preview.js' %}"></script>
+{% endblock %}
+

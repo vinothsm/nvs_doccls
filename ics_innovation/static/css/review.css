@@ -1,0 +1,87 @@
+.main-container{
+  display: flex;
+}
+.parameters-view.rounded, .right-view.rounded{
+  border-radius: 1.25rem!important;
+  /* height: calc(100vh - 190px); */
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+.parameters-view.rounded{
+margin-right: 45px;
+margin-left: 35px;
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* .trial-parameters-header, */
+.table-result-header{
+  margin-bottom: 20px;
+}
+
+.trial-parameters-container{
+  margin-top: 10px;
+  
+}
+
+.table-container{
+  margin-top: 10px;
+}
+
+.submit_img{
+  height: 50px;
+}
+.csv_btn_container{
+  display: grid;
+  margin-top: -2px;
+  margin-left: 30px;
+}
+
+.csv_img{
+  height: 35px;
+}
+
+#csv_download_file{
+  margin-top: -7px;
+  font-size: 11px;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.submit-btn-container{
+  text-align: center;}
+
+
+.alert-popup-body{
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+.alert-popup-content{
+    width: 65%;
+  }
+  
+.alert-popup-header{
+    border-bottom: 0px solid #dee2e6;
+    padding: 0rem 0.5rem;
+}
+
+.th-img-column{
+  height: 12px;
+}
+
+.th-img-row{
+  height: 15.5px;
+}
+
+input.form-control{
+  height: 30px;
+}
