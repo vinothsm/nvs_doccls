@@ -20,6 +20,7 @@
     "bootstrap": "^4.6.1",
     "bootstrap-select": "^1.13.18",
     "datatables": "^1.10.18",
+    "g1": "^0.18.0",
     "jquery": "^3.5.1",
     "underscore": "^1.13.4"
   }

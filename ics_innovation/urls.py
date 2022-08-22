@@ -23,7 +23,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.render_home, name="home"),
-    path("extracted_data/", views.get_suggestions),
+    path("extracted_data/", views.get_prediction),
 
  
 ]
