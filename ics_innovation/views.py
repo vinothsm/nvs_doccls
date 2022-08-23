@@ -43,24 +43,23 @@ def get_prediction(request):
     {"aa_attrition": 0.44029015150669476,"assian_attrition": 0,"native_attrition": 0,"overall_attrition": 6.605375048976249,"country":'India'}
 ]
     inputs={
-    "Number_of_Years": 0.3,
-    "Age_mean": 59.5,
-    "Planned_Enrollment":163,
-    "GDP_Country_name":"India",
-    "Asian_fraction":0,
-    "Native_fraction":0,
-    "AA_fraction":1,
-    "Intervention_Treatment_no_of_drugs":["Budesonide","Single low dose cyclophosphamide"],
-    "AE_chest_pain":0,
-    "AE_respiratory_failure":0,
-    "Number_of_Diseases":["Influenza","Pulmonary","Asthma"]
-    }
-    # if env=='prod':
-    #     # op_dict={'Number_of_Years':3, 'Age_mean':59.5, 'Planned_Enrollment': 163, 'GDP_Country_name':'India', 'Asian_fraction':8, 'Native_fraction':8, "AA_fraction":1, 'Intervention_Treatment_no_of_drugs': ['Budesonide', 'Single low-dose cyclophosphanide'], 'AE_chest_pain':8, 'AE_respiratory_failure':8, 'Number_of_Diseases': ['Influenza', 'Pulmonary', 'Asthna']}
-    #     url = url_
-    #     resp = req.post(url,json=inputs)
-    #     print(resp.json)
-        # resp_json = resp.json()
+    "number_of_years": 5,
+    "age_mean": 12,
+    "planned_enrollment":25,
+    "gdp_country_names":["USA","India","Switzerland","Australia","Netherlands","Iceland","United Kingdom"],
+    "asian_fraction":0,
+    "native_fraction":1,
+    "aa_fraction":0,
+    "intervention_treatment_no_of_drugs":4,
+    "ae_chest_pain":0,
+    "ae_respiratory_failure":0,
+    "number_of_diseases":2
+}
+    if env=='prod':
+        url = url_
+        resp = req.post(url,json=inputs)
+        print(resp.json)
+        resp_json = resp.json()
     return JsonResponse( {'data':resp_json})
     
     

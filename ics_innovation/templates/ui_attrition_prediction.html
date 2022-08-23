@@ -95,21 +95,21 @@
         </div>
       </div>    
       <div class="right-view rounded shadow-sm col-7">
-        <div class="table-container mb-2 d-none">
+        <div class="table-container mb-2 ">
           <p class="table-result-header ml-2">Attrition by Age Group and Demographics</p>
           <div class="table-filters d-flex">
               <div class="row-selection">
                   <label for="row" class="label ml-2">Row selection</label>
-                  <select class="selectpicker" name="row" id="row_drpdwn"  data-width="200px">
-                    <option>option1</option>
+                  <select class="selectpicker" name="row" id="row_drpdwn"  data-width="200px" disabled>
+                    <option>Country</option>
                     <option>option2</option>
                     <option>option3</option>
                   </select>
               </div>
               <div class="col-selection">
                   <label for="col" class="label ml-2">Column selection</label>
-                  <select class="selectpicker" name="col" id="col_drpdwn"   data-width="200px">
-                    <option>option1</option>
+                  <select class="selectpicker" name="col" id="col_drpdwn"   data-width="200px" disabled>
+                    <option>Demographics</option>
                     <option>option2</option>
                     <option>option3</option>
                   </select>
@@ -127,6 +127,8 @@
                 </div>
               <table id='attrition-pridiction-table' class="table table-striped table-bordered"></table>
           </div>
+          <div id="test-table"></div>
+
         </div>
       </div>
     </div>
