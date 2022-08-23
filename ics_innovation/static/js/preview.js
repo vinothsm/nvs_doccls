@@ -1,18 +1,16 @@
 $('.seleckpicker').selectpicker()
-create_table()
 
 $('body').on('click','#submit_parameters',function(e){
-    if( $('#trial_duriation').val()!=='' && $('#age_group').val()!==''&& $('#total_patient_enrollment').val()!==''&& $('#country').val()!==''&& $('#demographics').val()!==''&& $('#no_of_drugs').val()!=='' && $('#adverse_events').val()!=='' && $('#diseases').val()!==''){
+    if($('#trial_duriation').val()!=='' && $('#age_group').val()!==''&& $('#total_patient_enrollment').val()!==''&& $('#country').val()!==''&& $('#demographics').val()!==''&& $('#no_of_drugs').val()!=='' && $('#adverse_events').val()!=='' && $('#diseases').val()!==''){
         $('.table-container').removeClass('d-none')
         $('.loader').removeClass('d-none')
         $('.loader').addClass('d-flex')
         var api_inputs=get_inputs()
         console.log('api_inputs',api_inputs)
         // debugger
-        // draw_table(api_inputs)
-        // create_table()
-        }
-    else{
+        draw_table(api_inputs)
+    }
+    else {
         $('#alert_limit').modal('show')
     }
 })
@@ -63,15 +61,10 @@ function draw_table(api_inputs){
             //     $('#attrition-pridiction-table').DataTable().destroy()
             //     $('#attrition-pridiction-table').empty()
             // }
-            var table=$('#attrition-pridiction-table').DataTable({
-                data:data.data,
-                columns : [
-                    { "data" : "country",'title':"country" },
-                    { "data" : "aa_attrition" ,'title':"aa_attrition"},
-                    { "data" : "assian_attrition",'title': "assian_attrition"},
-                    { "data" : "native_attrition",'title': "native_attrition"},
-                    { "data" : "overall_attrition" ,'title': "overall_attrition"},
-                ],
+            processed_data = data.data
+            element_id = '#attrition-pridiction-table'
+            create_table(element_id, processed_data)
+            var table=$(element_id + " table").DataTable({
                 'pageLength':4,
                 'scrollY': '200px',
                 'columnDefs': [
@@ -80,10 +73,9 @@ function draw_table(api_inputs){
                 "initComplete": function( settings, json ) {
                     $('.loader').addClass('d-none')
                     $('.loader').removeClass('d-flex')
-                    change_columnname_format()
+                    // change_columnname_format()
                   }
             })
-            processed_data =data.data
             const csvString = [
                 Object.keys(processed_data[0]),
                 ...processed_data.map((item) => [item.aa_attrition,item.assian_attrition, item.native_attrition,item.overall_attrition,item.country]),
@@ -132,51 +124,45 @@ function get_inputs(){
     return res_inputs
 }
 
-function create_table(){
-    var table_html=`<table id="example" class="display" style="width:100%">
-    <thead>
-       
-        <tr>
-            <th>Country<img class="th-img-row" src='static/img/arrow-down.PNG' alt="arrow-down">/Demographics<img class="th-img-column" src='static/img/arrow-right.PNG' alt="arrow-right">
-            </th>
-            <th>Salary</th>
-            <th>Office</th>
-            <th>Extn.</th>
-            <th>E-mail</th>
-            <th>E-mail</th>
+function create_table(element_id, data){
+    var columns =[
+        "country",
+        "aa_attrition",
+        "assian_attrition",
+        "native_attrition",
+        "overall_attrition"
+    ]
 
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Tiger Nixon</td>
-            <td>System Architect</td>
-            <td>$320,800</td>
-            <td>Edinburgh</td>
-            <td>5421</td>
-            <td>t.nixon@datatables.net</td>
-        </tr>
-        <tr>
-            <td>Garrett Winters</td>
-            <td>Accountant</td>
-            <td>$170,750</td>
-            <td>Tokyo</td>
-            <td>8422</td>
-            <td>g.winters@datatables.net</td>
-        </tr>
-    </tbody>
-    <tfoot>
-        <tr>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Salary</th>
-            <th>Office</th>
-            <th>Extn.</th>
-            <th>E-mail</th>
-        </tr>
-    </tfoot>
-</table>`
-    var element_id= '#test-table'
+    var table_html=`<table id="op_table" class="display" style="width:100%">
+    <thead>
+        <tr>`
+    columns.forEach((col) => {
+        if(["country"].includes(col)){
+            table_html += `<th>
+            Demographics<img class="th-img-column" src='static/img/arrow-right.PNG' alt="arrow-right">
+            </th>`
+        } else {
+            table_html += `<th rowspan="2">${col}</th>`
+        }
+    })
+
+    table_html += `</tr>`
+    table_html += `<tr>
+            <th>
+            Country<img class="th-img-row" src='static/img/arrow-down.PNG' alt="arrow-down">
+            </th>
+       </tr>
+    </thead>`
+    table_html += `<tbody>`
+    data.forEach((datum) => {
+        table_html += `<tr>`
+        columns.forEach((col) => {
+            table_html += `<td>${datum[col]}</td>`
+        })
+        table_html += `</tr>`
+    })
+    table_html += `</tbody>`
+    table_html += `</table>`
     $(element_id).append(table_html)
-    $('#example').DataTable();
+    // $('#example').DataTable();
 }
