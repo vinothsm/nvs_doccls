@@ -56,7 +56,8 @@ function change_columnname_format(){
 
 function draw_table(api_inputs){
     var processed_data=[]
-        $.get('extracted_data/',api_inputs,function(data){
+    console.log('api_inputs---------',api_inputs)
+        $.post('/extracted_data/',api_inputs,function(data){
             // if(!$('#attrition-pridiction-table').empty()){
             //     $('#attrition-pridiction-table').DataTable().destroy()
             //     $('#attrition-pridiction-table').empty()
@@ -76,9 +77,10 @@ function draw_table(api_inputs){
                     // change_columnname_format()
                   }
             })
+
             const csvString = [
                 Object.keys(processed_data[0]),
-                ...processed_data.map((item) => [item.aa_attrition,item.assian_attrition, item.native_attrition,item.overall_attrition,item.country]),
+                ...processed_data.map((item) => [item.aa_attrition,item.assian_attrition, item.country,item.native_attrition,item.overall_attrition]),
               ]
                 .map((e) => e.join(","))
                 .join("\n");
@@ -113,13 +115,13 @@ function get_inputs(){
     })
     res_inputs['age_mean']=age_mean/age_list.length
     res_inputs["planned_enrollment"]=$('#total_patient_enrollment').val()
-    res_inputs['gdp_country_names']=$('#country').val()
+    res_inputs['gdp_country_names']=$('#country').val().toString()
     res_inputs['asian_fraction']=$('#demographics').val().includes('Asian Fraction')? 1:0
     res_inputs['native_fraction']=$('#demographics').val().includes('Native Fraction')?1:0
     res_inputs['aa_fraction']= $('#demographics').val().includes('African American Fraction')?1:0
     res_inputs['intervention_treatment_no_of_drugs']=$('#no_of_drugs').val()
     res_inputs['ae_chest_pain']= $('#adverse_events').val().includes('Chest pain')?1:0
-    res_inputs['ae_chest_pain']=$('#adverse_events').val().includes('Respiratory Failure')?1:0
+    res_inputs['ae_respiratory_failure']=$('#adverse_events').val().includes('Respiratory Failure')?1:0
     res_inputs['number_of_diseases']=$('#diseases').val().length
     return res_inputs
 }
@@ -157,12 +159,18 @@ function create_table(element_id, data){
     data.forEach((datum) => {
         table_html += `<tr>`
         columns.forEach((col) => {
-            table_html += `<td>${datum[col]}</td>`
+            if(["country"].includes(col)){
+                table_html += `<td>${ datum[col]}</td>`
+
+            }
+            else{
+                table_html += `<td>${ parseFloat(datum[col]).toFixed(2)}%</td>`
+
+            }
         })
         table_html += `</tr>`
     })
     table_html += `</tbody>`
     table_html += `</table>`
     $(element_id).append(table_html)
-    // $('#example').DataTable();
 }

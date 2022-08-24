@@ -86,3 +86,10 @@ input.form-control{
   height: 30px;
   margin-top: 8px;
 }
+.initial-table{
+  border:0px!important;
+}
+
+td{
+  text-align: center;
+}

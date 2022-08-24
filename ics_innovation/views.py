@@ -42,7 +42,7 @@ def get_prediction(request):
     {"aa_attrition": 0.44029015150669476,"assian_attrition": 0,"native_attrition": 0,"overall_attrition": 6.605375048976249,"country":'India'},
     {"aa_attrition": 0.44029015150669476,"assian_attrition": 0,"native_attrition": 0,"overall_attrition": 6.605375048976249,"country":'India'}
 ]
-    inputs={
+    inputs_values={
     "number_of_years": 5,
     "age_mean": 12,
     "planned_enrollment":25,
@@ -57,8 +57,18 @@ def get_prediction(request):
 }
     if env=='prod':
         url = url_
-        resp = req.post(url,json=inputs)
-        print(resp.json)
+        inputs_values=request.POST.dict()
+        resp = req.post(url,json={'gdp_country_names':request.POST['gdp_country_names'].split(','),
+          "number_of_years": int(inputs_values['number_of_years']),
+        "age_mean": float(inputs_values['age_mean']),
+        "planned_enrollment":int(inputs_values['planned_enrollment']),
+        "asian_fraction":int(inputs_values['asian_fraction']),
+        "native_fraction":int(inputs_values['native_fraction']),
+        "aa_fraction":int(inputs_values['aa_fraction']),
+        "intervention_treatment_no_of_drugs":int(inputs_values['intervention_treatment_no_of_drugs']),
+        "ae_chest_pain":int(inputs_values['ae_chest_pain']),
+        "ae_respiratory_failure":int(inputs_values['ae_respiratory_failure']),
+        "number_of_diseases":int(inputs_values['number_of_diseases'])})
         resp_json = resp.json()
     return JsonResponse( {'data':resp_json})
     
