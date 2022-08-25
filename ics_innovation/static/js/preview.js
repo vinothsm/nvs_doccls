@@ -143,7 +143,12 @@ function create_table(element_id, data){
             table_html += `<th>
             Demographics<img class="th-img-column" src='static/img/arrow-right.PNG' alt="arrow-right">
             </th>`
-        } else {
+        } 
+        else if(col.includes('assian')){
+            table_html += `<th rowspan="2">asian_attrition</th>`
+
+        }
+        else {
             table_html += `<th rowspan="2">${col}</th>`
         }
     })
