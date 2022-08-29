@@ -93,3 +93,15 @@ input.form-control{
 td{
   text-align: center;
 }
+
+.dataTables_length{
+  display: flex;
+}
+
+.switch-btn{
+  margin-left: 20px;
+}
+
+.left-label{
+  margin-right: 40px;
+}

@@ -1,14 +1,14 @@
 $('.seleckpicker').selectpicker()
-
+var api_inputs={}
 $('body').on('click','#submit_parameters',function(e){
     if($('#trial_duriation').val()!=='' && $('#age_group').val()!==''&& $('#total_patient_enrollment').val()!==''&& $('#country').val()!==''&& $('#demographics').val()!==''&& $('#no_of_drugs').val()!=='' && $('#adverse_events').val()!=='' && $('#diseases').val()!==''){
         $('.table-container').removeClass('d-none')
         $('.loader').removeClass('d-none')
         $('.loader').addClass('d-flex')
-        var api_inputs=get_inputs()
+        api_inputs=get_inputs()
         console.log('api_inputs',api_inputs)
         // debugger
-        draw_table(api_inputs)
+        draw_table(api_inputs,'')
     }
     else {
         $('#alert_limit').modal('show')
@@ -47,6 +47,15 @@ $('body').on('click','#submit_parameters',function(e){
     var count= $('#diseases').val().length
     $('.filter-option-inner-inner')[4].textContent = count+" selected";
  })
+ .on('change','#customSwitches',function(e){
+     $('#attrition-pridiction-table').html('')
+     if(this.checked == true){
+        draw_table(api_inputs,'checked')
+     }
+     else{
+        draw_table(api_inputs,'')
+     }
+ })
 
 function change_columnname_format(){
     var first_column=$('th')
@@ -54,17 +63,31 @@ function change_columnname_format(){
     first_column[0].innerHTML=html_content
 }
 
-function draw_table(api_inputs){
+function draw_table(api_inputs,switch_value){
     var processed_data=[]
-    console.log('api_inputs---------',api_inputs)
         $.post('/extracted_data/',api_inputs,function(data){
             // if(!$('#attrition-pridiction-table').empty()){
             //     $('#attrition-pridiction-table').DataTable().destroy()
             //     $('#attrition-pridiction-table').empty()
             // }
             processed_data = data.data
+            if(switch_value == 'checked'){
+                var required_data=[],
+                temp_dict={};
+                processed_data=data.data.map(function(item) {
+                temp_dict['aa_attrition']=Math.ceil((api_inputs['planned_enrollment']/(100-item.aa_attrition))*100)
+                temp_dict['assian_attrition']=Math.ceil((api_inputs['planned_enrollment']/(100-item.assian_attrition))*100)
+                temp_dict['native_attrition']=Math.ceil((api_inputs['planned_enrollment']/(100-item.native_attrition))*100)
+                temp_dict['overall_attrition']=Math.ceil((api_inputs['planned_enrollment']/(100-item.overall_attrition))*100)
+                temp_dict['country']=item.country
+                required_data.push(temp_dict)
+                temp_dict={}
+            })
+            processed_data= required_data
+        }
+
             element_id = '#attrition-pridiction-table'
-            create_table(element_id, processed_data)
+            create_table(element_id, processed_data,switch_value)
             var table=$(element_id + " table").DataTable({
                 'pageLength':4,
                 'scrollY': '200px',
@@ -74,10 +97,22 @@ function draw_table(api_inputs){
                 "initComplete": function( settings, json ) {
                     $('.loader').addClass('d-none')
                     $('.loader').removeClass('d-flex')
-                    // change_columnname_format()
+                    var toggle_html_content=`
+                    <div class="custom-control custom-switch switch-btn">
+                    <label for="customSwitches" class="left-label">Percentages</label>`
+                    if(switch_value==''){
+                    toggle_html_content=toggle_html_content+`<input type="checkbox" class="custom-control-input" id="customSwitches" >
+                      <label class="custom-control-label" for="customSwitches">Recruitment plan</label>
+                    </div>`}
+                    else{
+                        toggle_html_content=toggle_html_content+`<input type="checkbox" class="custom-control-input" id="customSwitches" checked>
+                        <label class="custom-control-label" for="customSwitches">Recruitment plan</label>
+                      </div>`
+                    }
+            $('.dataTables_length').append(toggle_html_content)
                   }
             })
-
+            
             const csvString = [
                 Object.keys(processed_data[0]),
                 ...processed_data.map((item) => [item.aa_attrition,item.assian_attrition, item.country,item.native_attrition,item.overall_attrition]),
@@ -126,7 +161,7 @@ function get_inputs(){
     return res_inputs
 }
 
-function create_table(element_id, data){
+function create_table(element_id, data,switch_value){
     var columns =[
         "country",
         "aa_attrition",
@@ -134,22 +169,29 @@ function create_table(element_id, data){
         "native_attrition",
         "overall_attrition"
     ]
-
+    var columns_real_names=[
+        "country",
+        "African American Attrition",
+        "Asian Attrition",
+        "Native Attrition",
+        "Overall attrition"
+    ]
+    var required_fields='country,overall_attrition'
+    var selected_fractions= $('#demographics').val()
     var table_html=`<table id="op_table" class="display" style="width:100%">
     <thead>
         <tr>`
-    columns.forEach((col) => {
+    columns.forEach((col,i) => {
         if(["country"].includes(col)){
             table_html += `<th>
             Demographics<img class="th-img-column" src='static/img/arrow-right.PNG' alt="arrow-right">
             </th>`
         } 
-        else if(col.includes('assian')){
-            table_html += `<th rowspan="2">asian_attrition</th>`
-
-        }
         else {
-            table_html += `<th rowspan="2">${col}</th>`
+            if(selected_fractions.includes(columns_real_names[i].replace('Attrition','Fraction')|| required_fields.includes(col))){
+
+            table_html += `<th rowspan="2">${columns_real_names[i]}</th>`
+            }
         }
     })
 
@@ -163,14 +205,20 @@ function create_table(element_id, data){
     table_html += `<tbody>`
     data.forEach((datum) => {
         table_html += `<tr>`
-        columns.forEach((col) => {
+        columns.forEach((col,i) => {
             if(["country"].includes(col)){
-                table_html += `<td>${ datum[col]}</td>`
-
+                    table_html += `<td>${ datum[col]}</td>`
             }
             else{
-                table_html += `<td>${ parseFloat(datum[col]).toFixed(2)}%</td>`
-
+                if(selected_fractions.includes(columns_real_names[i].replace('Attrition','Fraction')|| required_fields.includes(col))){
+                    if(switch_value ==''){
+                            table_html += `<td>${ parseFloat(datum[col]).toFixed(2)}%</td>`
+                        }
+                
+                    else{
+                        table_html += `<td>${ datum[col]}</td>`
+                    }
+                }
             }
         })
         table_html += `</tr>`

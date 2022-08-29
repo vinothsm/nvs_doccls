@@ -70,6 +70,8 @@ def get_prediction(request):
         "ae_respiratory_failure":int(inputs_values['ae_respiratory_failure']),
         "number_of_diseases":int(inputs_values['number_of_diseases'])})
         resp_json = resp.json()
+    if env =='dev':
+        resp_json = resp_json
     return JsonResponse( {'data':resp_json})
     
     

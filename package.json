@@ -19,6 +19,8 @@
   "dependencies": {
     "bootstrap": "^4.6.1",
     "bootstrap-select": "^1.13.18",
+    "bootstrap-switch": "^3.4.0",
+    "bootstrap-switch-button": "^1.1.0",
     "datatables": "^1.10.18",
     "g1": "^0.18.0",
     "jquery": "^3.5.1",
