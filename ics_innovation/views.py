@@ -58,7 +58,7 @@ def get_prediction(request):
     if env=='prod':
         url = url_
         inputs_values=request.POST.dict()
-        resp = req.post(url,json={'gdp_country_names':request.POST['gdp_country_names'].split(','),
+        resp = req.post(url,json={'gdp_country_names':inputs_values['gdp_country_names'].split(','),
           "number_of_years": int(inputs_values['number_of_years']),
         "age_mean": float(inputs_values['age_mean']),
         "planned_enrollment":int(inputs_values['planned_enrollment']),
@@ -70,8 +70,6 @@ def get_prediction(request):
         "ae_respiratory_failure":int(inputs_values['ae_respiratory_failure']),
         "number_of_diseases":int(inputs_values['number_of_diseases'])})
         resp_json = resp.json()
-    if env =='dev':
-        resp_json = resp_json
     return JsonResponse( {'data':resp_json})
     
     

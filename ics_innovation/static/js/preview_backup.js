@@ -1,24 +1,20 @@
 $('.seleckpicker').selectpicker()
 var api_inputs={}
-
 $('body').on('click','#submit_parameters',function(e){
-    if($('#trial_duriation').val()!=='' && $('#age_group').val()!==''&& $('#total_patient_enrollment').val()!==''&& $('#country').val()!==''&& $('#demographics').val()!==''&& $('#no_of_drugs').val()!=='' && $('#adverse_events').val()!=='' && $('#diseases').val()!==''){
+    if($('#trial_duriation').val()!=='' && $('#age_group').val()!==''&& $('#total_patient_enrollment').val()!==''&& $('#country').val().length!=0 && $('#demographics').val().length!=0 && $('#no_of_drugs').val().length!=0 &&  $('#adverse_events').val().length!=0 &&  $('#diseases').val().length!=0){
         $('.table-container').removeClass('d-none')
         $('.loader').removeClass('d-none')
         $('.loader').addClass('d-flex')
-        var api_inputs=get_inputs()
+        api_inputs=get_inputs()
         console.log('api_inputs',api_inputs)
         // debugger
+        $('#attrition-pridiction-table').html('')
         draw_table(api_inputs,'')
     }
     else {
         $('#alert_limit').modal('show')
+        $('#attrition-pridiction-table').html('')
         $('.table-container').addClass('d-none')
-        element_id = '#attrition-pridiction-table'
-        if($(element_id + " table").length){
-            $(element_id + " table").DataTable().destroy()
-            $(element_id).empty()
-        }
     }
 })
 .on('change','#row_drpdwn',function(e){
@@ -55,14 +51,15 @@ $('body').on('click','#submit_parameters',function(e){
     $('.filter-option-inner-inner')[4].textContent = count+" selected";
  })
  .on('change','#customSwitches',function(e){
-    $('#attrition-pridiction-table').html('')
-    if(this.checked == true){
-       draw_table(api_inputs,'checked')
-    }
-    else{
-       draw_table(api_inputs,'')
-    }
-})
+     $('#attrition-pridiction-table').html('')
+     if(this.checked == true){
+        draw_table(api_inputs,'checked')
+     }
+     else{
+        draw_table(api_inputs,'')
+     }
+ })
+
 function change_columnname_format(){
     var first_column=$('th')
     var html_content=$('#row_drpdwn').val()+`<img class="th-img-row" src='static/img/arrow-down.PNG' alt="arrow-down">`+$('#col_drpdwn').val()+`<img class="th-img-column" src='static/img/arrow-right.PNG' alt="arrow-right">`
@@ -71,14 +68,12 @@ function change_columnname_format(){
 
 function draw_table(api_inputs,switch_value){
     var processed_data=[]
-    console.log('api_inputs---------',api_inputs)
         $.post('/extracted_data/',api_inputs,function(data){
+            // if(!$('#attrition-pridiction-table').empty()){
+            //     $('#attrition-pridiction-table').DataTable().destroy()
+            //     $('#attrition-pridiction-table').empty()
+            // }
             processed_data = data.data
-            element_id = '#attrition-pridiction-table'
-            if($(element_id + " table").length){
-                $(element_id + " table").DataTable().destroy()
-                $(element_id).empty()
-            }
             if(switch_value == 'checked'){
                 var required_data=[],
                 temp_dict={};
@@ -94,7 +89,8 @@ function draw_table(api_inputs,switch_value){
             processed_data= required_data
         }
 
-            create_table(element_id, processed_data)
+            element_id = '#attrition-pridiction-table'
+            create_table(element_id, processed_data,switch_value)
             var table=$(element_id + " table").DataTable({
                 'pageLength':4,
                 'scrollY': '200px',
@@ -119,6 +115,7 @@ function draw_table(api_inputs,switch_value){
             $('.dataTables_length').append(toggle_html_content)
                   }
             })
+            
             const csvString = [
                 Object.keys(processed_data[0]),
                 ...processed_data.map((item) => [item.aa_attrition,item.assian_attrition, item.country,item.native_attrition,item.overall_attrition]),
@@ -166,56 +163,6 @@ function get_inputs(){
     res_inputs['number_of_diseases']=$('#diseases').val().length
     return res_inputs
 }
-
-function create_table_v0(element_id, data,switch_value){
-    var columns =[
-        "country",
-        "aa_attrition",
-        "assian_attrition",
-        "native_attrition",
-        "overall_attrition"
-    ]
-
-    var table_html=`<table id="op_table" class="display" style="width:100%">
-    <thead>
-        <tr>`
-    columns.forEach((col) => {
-        if(["country"].includes(col)){
-            table_html += `<th>
-            Demographics<img class="th-img-column" src='static/img/arrow-right.PNG' alt="arrow-right">
-            </th>`
-        } else {
-            table_html += `<th rowspan="2">${col}</th>`
-        }
-    })
-
-    table_html += `</tr>`
-    table_html += `<tr>
-            <th>
-            Country<img class="th-img-row" src='static/img/arrow-down.PNG' alt="arrow-down">
-            </th>
-       </tr>
-    </thead>`
-    table_html += `<tbody>`
-    data.forEach((datum) => {
-        table_html += `<tr>`
-        columns.forEach((col) => {
-            if(["country"].includes(col)){
-                table_html += `<td>${ datum[col]}</td>`
-
-            }
-            else{
-                table_html += `<td>${ parseFloat(datum[col]).toFixed(2)}%</td>`
-
-            }
-        })
-        table_html += `</tr>`
-    })
-    table_html += `</tbody>`
-    table_html += `</table>`
-    $(element_id).append(table_html)
-}
-
 
 function create_table(element_id, data,switch_value){
     var columns =[
