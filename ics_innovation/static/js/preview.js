@@ -176,7 +176,7 @@ function create_table(element_id, data,switch_value){
         "Native Attrition",
         "Overall attrition"
     ]
-    var required_fields='country,overall_attrition'
+    var required_fields=['country','overall_attrition']
     var selected_fractions= $('#demographics').val()
     var table_html=`<table id="op_table" class="display" style="width:100%">
     <thead>
@@ -188,7 +188,7 @@ function create_table(element_id, data,switch_value){
             </th>`
         } 
         else {
-            if(selected_fractions.includes(columns_real_names[i].replace('Attrition','Fraction')|| required_fields.includes(col))){
+            if(required_fields.includes(col)||selected_fractions.includes(columns_real_names[i].replace('Attrition','Fraction'))){
 
             table_html += `<th rowspan="2">${columns_real_names[i]}</th>`
             }
@@ -210,7 +210,7 @@ function create_table(element_id, data,switch_value){
                     table_html += `<td>${ datum[col]}</td>`
             }
             else{
-                if(selected_fractions.includes(columns_real_names[i].replace('Attrition','Fraction')|| required_fields.includes(col))){
+                if(required_fields.includes(col)||selected_fractions.includes(columns_real_names[i].replace('Attrition','Fraction'))){
                     if(switch_value ==''){
                             table_html += `<td>${ parseFloat(datum[col]).toFixed(2)}%</td>`
                         }
