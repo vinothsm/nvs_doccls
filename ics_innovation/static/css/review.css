@@ -105,3 +105,8 @@ td{
 .left-label{
   margin-right: 40px;
 }
+
+
+table td:nth-child(1){
+  text-align: left;
+}​
