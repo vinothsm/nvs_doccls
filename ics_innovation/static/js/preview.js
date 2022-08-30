@@ -8,6 +8,7 @@ $('body').on('click','#submit_parameters',function(e){
         api_inputs=get_inputs()
         console.log('api_inputs',api_inputs)
         // debugger
+        $('#attrition-pridiction-table').html('')
         draw_table(api_inputs,'')
     }
     else {
