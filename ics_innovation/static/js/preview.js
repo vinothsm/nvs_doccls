@@ -1,7 +1,7 @@
 $('.seleckpicker').selectpicker()
 var api_inputs={}
 $('body').on('click','#submit_parameters',function(e){
-    if($('#trial_duriation').val()!=='' && $('#age_group').val()!==''&& $('#total_patient_enrollment').val()!==''&& $('#country').val()!==''&& $('#demographics').val()!==''&& $('#no_of_drugs').val()!=='' && $('#adverse_events').val()!=='' && $('#diseases').val()!==''){
+    if($('#trial_duriation').val()!=='' && $('#age_group').val()!==''&& $('#total_patient_enrollment').val()!==''&& $('#country').val().length!=0 && $('#demographics').val().length!=0 && $('#no_of_drugs').val().length!=0 &&  $('#adverse_events').val().length!=0 &&  $('#diseases').val().length!=0){
         $('.table-container').removeClass('d-none')
         $('.loader').removeClass('d-none')
         $('.loader').addClass('d-flex')
@@ -13,6 +13,8 @@ $('body').on('click','#submit_parameters',function(e){
     }
     else {
         $('#alert_limit').modal('show')
+        $('#attrition-pridiction-table').html('')
+        $('.table-container').addClass('d-none')
     }
 })
 .on('change','#row_drpdwn',function(e){

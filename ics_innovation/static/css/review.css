@@ -107,6 +107,10 @@ td{
 }
 
 
+.mandatory_text{
+  font-size: 10px 
+}
+
 table td:nth-child(1){
   text-align: left;
 }​
