@@ -116,14 +116,42 @@ function draw_table(api_inputs,switch_value){
                   }
             })
             
+            var xl_headers=['Country'].concat($('#demographics').val())
+            xl_headers.push('Overall attrition')
+            xl_headers.forEach(function(header,i){
+                if(header.includes('Fraction')){
+                    xl_headers[i]=header.replace('Fraction','Attrition')
+                }
+            })
             const csvString = [
-                Object.keys(processed_data[0]),
-                ...processed_data.map((item) => [item.aa_attrition,item.assian_attrition, item.country,item.native_attrition,item.overall_attrition]),
-              ]
+                xl_headers,
+                ...processed_data.map(function(item){
+                    var value_list=[]
+                    value_list.push(item.country)
+                    if(xl_headers.includes("African American Attrition"))
+                    {
+                        value_list.push(item.aa_attrition)
+
+                    }
+                    if(xl_headers.includes("Asian Attrition"))
+                    {
+                        value_list.push(item.assian_attrition)
+
+                    }
+                    if(xl_headers.includes("Native Attrition"))
+                    {
+                        value_list.push(item.native_attrition)
+
+                    }
+                    value_list.push(item.overall_attrition)
+                return value_list
+             })
+            ]
                 .map((e) => e.join(","))
                 .join("\n");
             downloadCSV(csvString);
         })
+
 }
 
 function downloadCSV(csvStr) {
