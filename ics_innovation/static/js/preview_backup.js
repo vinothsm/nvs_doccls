@@ -82,6 +82,7 @@ function draw_table(api_inputs,switch_value){
                 temp_dict['assian_attrition']=Math.ceil((api_inputs['planned_enrollment']/(100-item.assian_attrition))*100)
                 temp_dict['native_attrition']=Math.ceil((api_inputs['planned_enrollment']/(100-item.native_attrition))*100)
                 temp_dict['overall_attrition']=Math.ceil((api_inputs['planned_enrollment']/(100-item.overall_attrition))*100)
+                temp_dict['others']=Math.ceil((api_inputs['planned_enrollment']/(100-item.others))*100)
                 temp_dict['country']=item.country
                 required_data.push(temp_dict)
                 temp_dict={}
@@ -117,6 +118,7 @@ function draw_table(api_inputs,switch_value){
             })
             
             var xl_headers=['Country'].concat($('#demographics').val())
+            xl_headers.push('Others')
             xl_headers.push('Overall attrition')
             xl_headers.forEach(function(header,i){
                 if(header.includes('Fraction')){
@@ -143,6 +145,7 @@ function draw_table(api_inputs,switch_value){
                         value_list.push(item.native_attrition)
 
                     }
+                    value_list.push(item.others)
                     value_list.push(item.overall_attrition)
                 return value_list
              })
@@ -198,6 +201,7 @@ function create_table(element_id, data,switch_value){
         "aa_attrition",
         "assian_attrition",
         "native_attrition",
+        'others',
         "overall_attrition"
     ]
     var columns_real_names=[
@@ -205,9 +209,10 @@ function create_table(element_id, data,switch_value){
         "African American Attrition",
         "Asian Attrition",
         "Native Attrition",
+        'Others',
         "Overall attrition"
     ]
-    var required_fields=['country','overall_attrition']
+    var required_fields=['country','others','overall_attrition']
     var selected_fractions= $('#demographics').val()
     var table_html=`<table id="op_table" class="display" style="width:100%">
     <thead>
