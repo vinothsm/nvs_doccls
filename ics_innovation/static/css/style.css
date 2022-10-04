@@ -353,3 +353,48 @@ overflow-x: scroll;
   border-bottom: 0px solid #dee2e6;
   padding: 0rem 0.5rem;
 }
+
+.train-modal-img{
+  height: 50px;
+}
+
+.train-modal-text{
+  text-align: center;
+  font-weight: bold;
+}
+
+.add-documents{
+  background-color: white;
+  border-radius: 1.25rem!important;
+  margin-left: 16%;
+}
+
+.upload-docs,.submit-doc-types,.upload-docs-fields{
+  background: #096AB4;
+  color: white;
+  height: fit-content;
+  /* margin-top: 28px;
+  width: 178px;
+  height: 50px;
+  border-radius: 23px;
+  font-size: 22px; */
+}
+.add_new_d_type{
+  height: 20px;
+}
+
+a:hover{
+  text-decoration: none;
+}
+
+.delete-doc-type{
+  margin-top: -6px;
+}
+
+.submit-doc-types{
+  float: right;
+}
+
+.model-status-text{
+  color: #086BB5;
+}

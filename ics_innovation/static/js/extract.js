@@ -62,6 +62,7 @@ $("body")
     $('.modal-body').text(text_msg)}
 })
 
+
 function update_html(html_content,container,_url=''){
   $(container).html(html_content)
 }

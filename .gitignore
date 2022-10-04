@@ -115,3 +115,4 @@ package-lock.json
 db.sqlite3
 
 *.txt
+ics_innovation/__pycache__/*.pyc

@@ -226,10 +226,21 @@ def get_form(request):
         })
     return render(request, "form.html", {"urls": []})
 
-def get_document_preview_file(request):
-    context={}
-    if request.method == "GET":
-        param = request.GET
-        document_name = param['document_name']
-        context['document_path']=selected_document_details[document_name]
-    return JsonResponse(context)
+# def get_document_preview_file(request):
+#     context={}
+#     if request.method == "GET":
+#         param = request.GET
+#         document_name = param['document_name']
+#         context['document_path']=selected_document_details[document_name]
+#     return JsonResponse(context)
+
+@api_view(['GET', 'POST'])
+
+def train_model(request):
+    return render(request, 'ui_upload_document_types.html', {})
+
+
+@api_view(['GET', 'POST'])
+
+def model_status(request):
+    return render(request, 'model_progress.html', {})

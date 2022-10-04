@@ -28,7 +28,11 @@ urlpatterns = [
     path("latest_req/", views.get_latest_req),
     path("form/", views.get_form),
     path("get_document/", views.get_document_preview_file),
-    path("preview/", views.get_preview)
+    path("preview/", views.get_preview),
+    path("train_model/", views.train_model),
+    path("model_status/", views.model_status)
+
+
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
