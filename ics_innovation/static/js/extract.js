@@ -16,18 +16,46 @@ $("body")
     showFile();
   })
 .on("click",".btn-card.btn-select", function(e) {
-    let selected_card= this.attributes['data-class']['value']
-    $(`.card.model-card`).removeClass('selected')
-    $(`.card.model-card  .avl-card-header`).removeClass('selected')
-    $(`.card.model-card[data-class='${selected_card}']`).addClass('selected')
-    $(`.card.model-card[data-class='${selected_card}'] .avl-card-header`).addClass('selected')
-    $(`.model-input-tag`).prop('checked',false)
-    $(`.model-input-tag[data-class='${selected_card}']`).prop('checked',true)
-  
+    let is_trained=this.attributes['data-istrained']['value']
+    var cuurent_ele=this
+    if(is_trained == 'trained'){
+      $.get('status_check',function(data){
+        if(data.msg!='completed'){
+          $('#alert_limit').modal('show')
+          $('.modal-body').text('Model Training is in Progress')
+        }
+        else{
+          let selected_card= cuurent_ele.attributes['data-class']['value']
+          $(`.card.model-card`).removeClass('selected')
+          $(`.card.model-card  .avl-card-header`).removeClass('selected')
+          $(`.card.model-card[data-class='${selected_card}']`).addClass('selected')
+          $(`.card.model-card[data-class='${selected_card}'] .avl-card-header`).addClass('selected')
+          $(`.model-input-tag`).prop('checked',false)
+          $(`.model-input-tag[data-class='${selected_card}']`).prop('checked',true)
+
+        }
+      })
+    }
+    else{
+      let selected_card= this.attributes['data-class']['value']
+      $(`.card.model-card`).removeClass('selected')
+      $(`.card.model-card  .avl-card-header`).removeClass('selected')
+      $(`.card.model-card[data-class='${selected_card}']`).addClass('selected')
+      $(`.card.model-card[data-class='${selected_card}'] .avl-card-header`).addClass('selected')
+      $(`.model-input-tag`).prop('checked',false)
+      $(`.model-input-tag[data-class='${selected_card}']`).prop('checked',true)
+    }
 })
 .on("click",".btn-card.btn-details", function(e) {
+  let is_trained=this.attributes['data-istrained']['value']
   let selected_card= this.attributes['data-class']['value']
-  $.get('/get_modal_details?modal_name='+selected_card,function(data){
+  let model_id=-1
+  debugger
+  if(is_trained == 'trained'){
+    model_id = this.attributes['data-id']['value']
+  }
+  var target_url='/get_modal_details?modal_name='+selected_card+'&modal_id='+model_id
+  $.get(target_url,function(data){
       let card_details=data['details_list']
       let html_content=''
       card_details.forEach(function(val){
@@ -61,7 +89,6 @@ $("body")
     $('#alert_limit').modal('show')
     $('.modal-body').text(text_msg)}
 })
-
 
 function update_html(html_content,container,_url=''){
   $(container).html(html_content)
@@ -133,6 +160,11 @@ function initalize_extract_view() {
 
 $(() => {
   initalize_extract_view()
+  $.get('status_check',function(data){
+    if(data.msg!='completed'){
+      $('#train-model-btn').attr('href','/model_status')
+    }
+  })
 })
 
 

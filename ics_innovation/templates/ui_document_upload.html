@@ -30,19 +30,29 @@
             <input class="model-input-tag" type="checkbox" name="entities" data-class="{{item}}" value="{{item}}">
             <header class="avl-card-header">{{item}}</header>
             <div class="avl-card-buttons">
-              <button class="btn btn-card btn-select" type="button" data-class="{{item}}" >Select</button>
-              <button class="btn btn-card btn-details" type="button" data-toggle="modal" data-target="#detailsModal" data-class="{{item}}" >View Details</button>
+              <button class="btn btn-card btn-select" type="button" data-class="{{item}}" data-istrained="nottrained">Select</button>
+              <button class="btn btn-card btn-details" type="button" data-toggle="modal" data-target="#detailsModal" data-class="{{item}}" data-istrained="nottrained">View Details</button>
             </div>
           </div>
           {% endfor %}
-          <a href="/train_model">
+          {% if  trained_model %}
+          <div class="card model-card rounded shadow-sm column" data-class="{{trained_model}}">
+            <input class="model-input-tag" type="checkbox" name="entities" data-class="{{trained_model}}" value="{{trained_model}}">
+            <header class="avl-card-header">{{trained_model}}</header>
+            <div class="avl-card-buttons">
+              <button class="btn btn-card btn-select" type="button" data-class="{{trained_model}}" data-id="{{model_id}}" data-istrained="trained">Select</button>
+              <button class="btn btn-card btn-details" type="button" data-toggle="modal" data-target="#detailsModal" data-class="{{trained_model}}" data-id="{{model_id}}" data-istrained="trained">View Details</button>
+            </div>
+          </div>
+          {% endif %}
+          <a href="/train_model" class="train-model-btn" id="train-model-btn">
             <div class="card model-card rounded shadow-sm column justify-content-center" >
               <img src="../static/img/plus-lg.svg" alt="add" class="train-modal-img">
               <span class="train-modal-text mt-2">Train a New Model</span>
             </div>
           </a>
         </div>
-  </div>
+    </div>
     <input id="submit_btn" type="submit" class="btn" val="Submit"/>
   </form>
 </div>

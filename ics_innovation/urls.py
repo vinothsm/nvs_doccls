@@ -30,7 +30,12 @@ urlpatterns = [
     path("get_document/", views.get_document_preview_file),
     path("preview/", views.get_preview),
     path("train_model/", views.train_model),
-    path("model_status/", views.model_status)
+    path("model_status/", views.model_status),
+    path("status_check/", views.status_check),
+    path("submit_files/", views.upload_files_for_training_model),
+
+    
+
 
 
 ]
