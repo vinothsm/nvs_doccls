@@ -271,7 +271,7 @@ def upload_files_for_training_model(request):
         context = {}
         return render(request, 'ui_upload_document_types.html', context=context)
     if request.method == "POST":
-        import pdb;pdb.set_trace()
+        # import pdb;pdb.set_trace()
         request.POST._mutable = True
         folder_name=request.POST.getlist('folder_name')
         model_name=request.POST.getlist('model_name')[0]
