@@ -22,7 +22,7 @@ $("body")
       $.get('status_check',function(data){
         if(data.msg!='completed'){
           $('#alert_limit').modal('show')
-          $('.modal-body').text('Model Training is in Progress')
+          $('.alert-popup-body').text('Model Training is in Progress')
         }
         else{
           let selected_card= cuurent_ele.attributes['data-class']['value']
@@ -50,7 +50,6 @@ $("body")
   let is_trained=this.attributes['data-istrained']['value']
   let selected_card= this.attributes['data-class']['value']
   let model_id=-1
-  debugger
   if(is_trained == 'trained'){
     model_id = this.attributes['data-id']['value']
   }
@@ -87,7 +86,7 @@ $("body")
   }
   if(text_msg !=''){ 
     $('#alert_limit').modal('show')
-    $('.modal-body').text(text_msg)}
+    $('.alert-popup-body').text(text_msg)}
 })
 
 function update_html(html_content,container,_url=''){
