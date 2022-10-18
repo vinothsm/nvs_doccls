@@ -26,8 +26,13 @@ $("body")
   })
   .on("click", "#submit-doc-types", function (e) {
     var doc_type_names=$('.doc-type-input')
-    var required_no_of_fields=doc_type_names.length-$('.additional-add-document-type.d-none').length
-    debugger
+    required_no_of_fields=doc_type_names.length-$('.additional-add-document-type.d-none').length
+    files_count=0
+    class_name_count =0,
+    is_valid=false,
+    files=$('input[name="media"]'),
+    class_names= $('input[name="folder_name"]')
+    
     if($('.modal-name-input').val() == ''){
         $('#alert_limit').modal('show')
         $('.modal-body').text('Please fill all the fields')

@@ -1,4 +1,3 @@
-from sklearn.metrics import classification_report
 from .convert_to_pdf import get_converted_file
 from django.http import FileResponse,JsonResponse
 from rest_framework.decorators import api_view
@@ -18,6 +17,10 @@ from rest_framework.response import Response
 import json
 from django.core.files.storage import FileSystemStorage
 from .extractor import get_fulltext_from_pdf
+from .forms import Uploadfiles
+from .models import FilesForTrainingModel,TrainedModel
+import pandas as pd
+
 env = "prod"
 doc_list= []
 selected_document_details={}
@@ -66,7 +69,6 @@ modal_classifications={
                                     'Summary of Clinical Efficacy',
                                     'Trial Initiation Monitoring Report']
    }
-
 @api_view(["GET"])
 def get_extracted_data(request):
     if env == "prod":
@@ -84,7 +86,9 @@ def get_extracted_data(request):
             modal_name=obj["model"]
             op.append(obj)
         url = "http://10.185.56.168:8053/classification"
-        resp = req.post(url, json=op)
+        if modal_name not in list(modal_classifications.keys()):
+             url = 'http://10.185.56.168:8051/model_prediction'
+
         resp_json = resp.json()
         for _file in resp_json:
             item = FileSerializer(OnlyFile.objects.filter(file_id=_file["file_id"]), many=True)
@@ -123,8 +127,13 @@ def get_modal_details(request):
    context={}
    if request.method == "GET":
         param = request.GET
-        modal_name = param['modal_name']
-        context['details_list']=modal_classifications[modal_name]
+        model_name = param['modal_name']
+        model_id =int(param['modal_id'])
+        if model_id == -1:
+            context['details_list']=modal_classifications[model_name]
+        else:
+            get_details=pd.DataFrame.from_records(FilesForTrainingModel.objects.filter(model_id__exact = model_id).values())
+            context['details_list']=get_details['folder_name'].tolist()
    return JsonResponse(context)
 
 
@@ -141,7 +150,13 @@ def upload_page(request):
     if request.method == "GET":
         # delete_all_files()
         # context = {}
-        context={'model_data':list(modal_classifications.keys())}
+        get_details=pd.DataFrame.from_records(TrainedModel.objects.all().values())
+        trained_model=''
+        model_id=''
+        if not get_details.empty:
+            trained_model=get_details.iloc[-1]['model_name']
+            model_id=get_details.iloc[-1]['model_id']
+        context={'model_data':list(modal_classifications.keys()),'trained_model':trained_model,'model_id':model_id}
         return render(request, 'ui_document_upload.html', context=context)
     if request.method == "POST":
         file_objs = []
@@ -244,3 +259,55 @@ def train_model(request):
 
 def model_status(request):
     return render(request, 'model_progress.html', {})
+
+
+@api_view(["GET", "POST"])
+def upload_files_for_training_model(request):
+    if request.method == "GET":
+        context = {}
+        return render(request, 'ui_upload_document_types.html', context=context)
+    if request.method == "POST":
+        request.POST._mutable = True
+        folder_name=request.POST.getlist('folder_name')
+        model_name=request.POST.getlist('model_name')[0]
+        tm = TrainedModel(model_name=model_name)
+        tm.save()
+        counts=request.POST.getlist('count')
+        count_file=0
+        file_index=0
+        training_url='http://10.185.56.168:8051/training'
+        files_=request.FILES.getlist('media')
+        page_load_json={
+                    'name_of_the_model' :model_name,
+                    "Folders" :[]
+                    }
+        for  file in files_:
+            request.POST.setlist('folder_name',[folder_name[file_index]])
+            request.POST.setlist('model_id',[tm.model_id])
+            request.FILES.setlist('media',[file])
+            form = Uploadfiles(request.POST, request.FILES)
+            if form.is_valid():
+                form = form.save()
+                form.save()
+                json = [{}]
+                count_file=count_file+1
+                if count_file == int(counts[file_index]):
+                    count_file = 0
+                    file_index =file_index+1
+        folders=[]
+        page_load_json['model_id'] = tm.model_id
+        for class_name in folder_name:
+            get_details=pd.DataFrame.from_records(FilesForTrainingModel.objects.filter(model_name__exact = model_name).exclude(is_trained = True).filter(folder_name__exact = class_name).values())
+            get_details=get_details.rename(columns={"file_name": "filename"})
+            files_json=get_details[[ 'filename', 'extracted_text']].to_json(orient='records')
+            folders.append({'foldername':class_name,'files':files_json})
+        page_load_json['Folders']=folders
+        resp = req.post(training_url, json=page_load_json)
+        FilesForTrainingModel.objects.filter(model_name__exact = model_name).exclude(is_trained = True).update(is_trained = True)
+        return render(request, 'model_progress.html', context={})
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+def status_check(request):
+    resp = req.get('http://10.185.56.168:8051/status_check')
+    return JsonResponse({'msg':resp.text})

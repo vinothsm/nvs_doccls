@@ -2,52 +2,57 @@
 {% load static %}
 {% block content %}
 <div class="add-documents rounded shadow-sm col-8 mt-5 p-5" id="add_documents">
+    <form action="/add_value/" enctype="multipart/form-data" method="post">
+      {% csrf_token %}
     <div class="justify-content-center">
         <div class="pb-1 d-flex ">    
             <label for="" class="mr-3">Model Name</label>
-            <input type="text" class="form-control col-sm-5 modal-name-input">
+            <input type="text" class="form-control col-sm-5 modal-name-input" name="model_name">
         </div>
         <div class="pl-5 pb-1 form-group add-document-type d-flex pt-3">
                 <label for="" class="pr-3">Document Type</label>
-                <input type="text" class="form-control col-sm-5 doc-type-input" >
-                <input type="file" name="" id="" hidden class="doc-file-input" multiple>
-                <button id="" type="button" class="btn ml-3 upload-docs">Upload</button>
+                <input type="text" class="form-control col-sm-5 doc-type-input" name="folder_name">
+                <input type="file" name="media"  hidden class="doc-file-input" multiple>
+                <button  type="button" class="btn ml-3 upload-docs">Upload</button>
                 <p class="ml-3 mt-2 show-doc-count">0 file(s) uploaded</p>
         </div>
         <div class="pl-5 pb-1 form-group add-document-type d-flex">
                 <label for="" class="pr-3">Document Type</label>
-                <input type="text" class="form-control col-sm-5 doc-type-input" >
-                <input type="file" name="" id="" class="doc-file-input" hidden multiple>
-                <button id="" type="button" class="btn ml-3 upload-docs">Upload</button>
+                <input type="text" class="form-control col-sm-5 doc-type-input" name="folder_name">
+                <input type="file" name="media"  class="doc-file-input" hidden multiple>
+                <button  type="button" class="btn ml-3 upload-docs">Upload</button>
                 <p class="ml-3 mt-2 show-doc-count">0 file(s) uploaded</p>
 
         </div>
         <div class="pl-5 pb-1 form-group add-document-type d-flex">
                 <label for="" class="pr-3">Document Type</label>
-                <input type="text"  class="form-control col-sm-5 doc-type-input">
-                <input type="file" name="" id="" class="doc-file-input" hidden multiple>
-                <button id="" type="button" class="btn ml-3 upload-docs">Upload</button>
+                <input type="text"  class="form-control col-sm-5 doc-type-input" name="folder_name">
+                <input type="file" name="media"  class="doc-file-input" hidden multiple>
+                <button  type="button" class="btn ml-3 upload-docs">Upload</button>
                 <p class="ml-3 mt-2 show-doc-count">0 file(s) uploaded</p>
         </div>
         <div class="pl-5 pb-1 form-group additional-add-document-type  d-none">
             <label for="" class="pr-3">Document Type</label>
-            <input type="text"  class="form-control col-sm-5 doc-type-input">
-            <input type="file" name="" id="" class="doc-file-input" hidden multiple>
-            <button id="" type="button" class="btn ml-3 upload-docs">Upload</button>
+            <input type="text"  class="form-control col-sm-5 doc-type-input" >
+            <input type="file" class="doc-file-input" hidden multiple>
+            <button  type="button" class="btn ml-3 upload-docs">Upload</button>
             <p class="ml-3 mt-2 show-doc-count">0 file(s) uploaded</p>
-            <img src="../static/img/x-circle.svg" alt="delete" class="btn delete-doc-type">
+            <img src="../static/img/x-circle.svg" alt="delete" class="btn delete-doc-type" type="button">
         </div>
         <div class="pl-5 pb-1 form-group additional-add-document-type d-none">
             <label for="" class="pr-3">Document Type</label>
-            <input type="text"  class="form-control col-sm-5 doc-type-input">
-            <input type="file" name="" id="" class="doc-file-input" hidden multiple>
-            <button id="" type="button" class="btn ml-3 upload-docs">Upload</button>
+            <input type="text"  class="form-control col-sm-5 doc-type-input" >
+            <input type="file"   class="doc-file-input" hidden multiple>
+            <button  type="button" class="btn ml-3 upload-docs">Upload</button>
             <p class="ml-3 mt-2 show-doc-count">0 file(s) uploaded</p>
-            <img src="../static/img/x-circle.svg" alt="delete" class="btn delete-doc-type">
+            <img src="../static/img/x-circle.svg" alt="delete" class="btn delete-doc-type" type="button">
         </div>
-        <button class="btn upload-docs-fields" id="upload-docs"><img src="../static/img/plus-lg.svg" alt="add" class="add_new_d_type"></button>
+        <button class="btn upload-docs-fields" id="upload-docs" type="button"><img src="../static/img/plus-lg.svg" alt="add" class="add_new_d_type"></button>
     </div>
-    <button class="btn submit-doc-types " id="submit-doc-types">Submit</button>
+    <button class="btn submit-doc-types " id="submit-doc-types" type="button">Submit</button>
+    <button class="btn submit-files "  type="submit">Submit</button>
+
+    </form>
 </div>
 
 <div class="modal fade" id="alert_limit" tabindex="-1" role="dialog" aria-labelledby="alert_limitLabel" aria-hidden="true">
