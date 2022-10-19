@@ -1,7 +1,6 @@
 django
 django-rest-framework
 python-docx
-fasttext
 pymupdf
 docx2txt
 django-node-assets
