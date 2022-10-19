@@ -79,13 +79,14 @@ def get_extracted_data(request):
         all_entries = json.loads(json.dumps(serializer.data))
         op = []
         modal_name=''
+        modal_id = -1
         for entry in all_entries:
             item = FileTextSerializer(FileText.objects.filter(file_id=entry['file_id']), many=True)
             obj = json.loads(json.dumps(item.data))[0]
             obj["model"] = req_object.entities
             obj["model_name"] = req_object.entities
             obj["file_id"] = str(entry['file_id'])
-            obj["file_text"] =obj["file_text"][:500]
+            # obj["file_text"] =obj["file_text"][:500]
             modal_name=obj["model"]
             op.append(obj)
         url = "http://10.185.56.168:8053/classification"
@@ -97,10 +98,19 @@ def get_extracted_data(request):
         for _file in resp_json:
             item = FileSerializer(OnlyFile.objects.filter(file_id=_file["file_id"]), many=True)
             _file["file_name"] = json.loads(json.dumps(item.data))[0]["file_name"]
-        
-        modal_classifications_list= modal_classifications[modal_name]
-        classification_count=dict.fromkeys(modal_classifications_list, 0)
-        return Response(data={'data': resp_json,'summary':classification_count})
+        if modal_name not in list(modal_classifications.keys()):
+            modal_details=pd.DataFrame.from_records(TrainedModel.objects.filter(model_name = modal_name).values())
+            if not modal_details.empty:
+                modal_id=int(modal_details.iloc[-1]['model_id'])
+            get_details=pd.DataFrame.from_records(FilesForTrainingModel.objects.filter(model_id = modal_id).values())
+            modal_classifications_list=list(set(get_details['folder_name'].tolist()))
+            classification_count=dict.fromkeys(modal_classifications_list, 0)
+            return Response(data={'data': resp_json,'summary':classification_count,'istrained':'true'})
+
+        else:
+            modal_classifications_list= modal_classifications[modal_name]
+            classification_count=dict.fromkeys(modal_classifications_list, 0)
+            return Response(data={'data': resp_json,'summary':classification_count,'istrained':'false'})
 
     if env == "dev":
         modal_name='Clinical Document Classification'
@@ -271,7 +281,6 @@ def upload_files_for_training_model(request):
         context = {}
         return render(request, 'ui_upload_document_types.html', context=context)
     if request.method == "POST":
-        # import pdb;pdb.set_trace()
         request.POST._mutable = True
         folder_name=request.POST.getlist('folder_name')
         model_name=request.POST.getlist('model_name')[0]

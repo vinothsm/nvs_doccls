@@ -23,11 +23,15 @@ function update_html(html_content, container, _url = "") {
 function preview_page_content() {
   $.get("/extracted_data/", function (data) {
     var Classification_summary=data['summary']
-    var data = data["data"] || [];
-    var processed_data = [];
-    var summury_data = [];
-    var count_data=0
-   
+    istrained = data['istrained']
+    data = data["data"] || [],
+    processed_data = [],
+    summury_data = []
+    count_data=0
+    class_name="class";
+    if(istrained == 'true'){
+    class_name="label"
+    }
     if (data.length) {
       let doc_html_content = `<embed  
             src="/static/${data[0]["file_name"]}#view=fitH"
@@ -48,17 +52,17 @@ function preview_page_content() {
         modal_content =
           modal_content +
           `<p class='entity-text-preview' title='${data[doc]["file_name"]}' >${data[doc]["file_name"]}</p>
-                <p class='sub-text'>${data[doc]["class"]}</p>
+                <p class='sub-text'>${data[doc][class_name]}</p>
               </div>`;
 
         processed_data.push({
           sno:doc,
           Document: data[doc]["file_name"],
-          Classification: data[doc]["class"],
+          Classification: data[doc][class_name],
         });
-        if(Object.keys(Classification_summary).includes(data[doc]["class"]))
+        if(Object.keys(Classification_summary).includes(data[doc][class_name]))
         {
-          Classification_summary[data[doc]["class"]] += 1
+          Classification_summary[data[doc][class_name]] += 1
         }
       }
       for (var key in Classification_summary) {
