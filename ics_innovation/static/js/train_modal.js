@@ -29,9 +29,17 @@ $("body")
     pe.children[2].click()
   })
   .on("change", ".doc-file-input", function (e) {
-    var pe=this.parentElement
-    pe.children[4].textContent=pe.children[2].files.length+' file(s) uploded'
-    pe.children[5].value=pe.children[2].files.length
+    if(this.files.length<5){
+      this.value = ''
+      $('#alert_limit').modal('show')
+      $('.modal-body').text('Please upload atleast 5 files')
+    }
+    else{
+      var pe=this.parentElement
+      pe.children[4].textContent=this.files.length+' file(s) uploded'
+      pe.children[5].value=this.files.length
+    }
+
   })
   .on("click", "#submit-doc-types", function (e) {
     var doc_type_names=$('.doc-type-input')
@@ -58,6 +66,9 @@ $("body")
       $('.modal-body').text('Please fill all the fields')
     }
     else{
+      $('#add_documents').addClass('d-none')
+      $('#model-training-status').removeClass('d-none')
+
       $('.submit-files').click()
     }
 
