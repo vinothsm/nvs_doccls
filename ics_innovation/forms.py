@@ -13,7 +13,8 @@ class Uploadfiles(forms.ModelForm):
     def save(self, commit=True):
         instance = super(Uploadfiles, self).save(commit=False)
         instance.file_name = os.path.splitext(instance.media.file._get_name())[0]
-        f_name= re.sub('[\[\]\(\))]','',instance.media.file._get_name())
+        f_name= re.sub('[\[\]\(\))&]','',instance.media.file._get_name())
+        # f_name= re.sub('[&]',' ',instance.media.file._get_name())
         instance.file_path = os.path.join(Path(__file__).parent, "static/files/"+f_name.replace(" ", "_"))
         print(instance.file_path)
         instance.is_trained  = False

@@ -162,6 +162,13 @@ $(() => {
   $.get('status_check',function(data){
     if(data.msg!='completed'){
       $('#train-model-btn').attr('href','/model_status')
+      $('.btn-train-select').css('opacity',0.3)
+      $('.btn-train-select').attr('title','Model Training is in Progress')
+    }
+    else{
+      $('.btn-train-select').css('opacity',1)
+      $('.btn-train-select').attr('title','')
+
     }
   })
 })

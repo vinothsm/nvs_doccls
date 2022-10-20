@@ -399,3 +399,9 @@ a:hover{
 .model-status-text{
   color: #086BB5;
 }
+
+.warning-msg{
+  margin-left: 17%;
+  font-size: 13px;
+  margin-top: 5px;
+}
