@@ -281,6 +281,9 @@ def upload_files_for_training_model(request):
         context = {}
         return render(request, 'ui_upload_document_types.html', context=context)
     if request.method == "POST":
+        get_details=pd.DataFrame.from_records(FilesForTrainingModel.objects.filter(is_extracted = 'False').values())
+        if len(get_details)>0:
+            return render(request, 'model_progress.html', context={'msg':'Warning: Already another modal file extraction is in progress. Server cannot take any more requests'})
         request.POST._mutable = True
         folder_name=request.POST.getlist('folder_name')
         model_name=request.POST.getlist('model_name')[0]
@@ -289,7 +292,6 @@ def upload_files_for_training_model(request):
         counts=request.POST.getlist('count')
         count_file=0
         file_index=0
-        training_url='http://10.185.56.168:8051/training'
         files_=request.FILES.getlist('media')
         page_load_json={
                     'name_of_the_model' :model_name,
@@ -307,19 +309,8 @@ def upload_files_for_training_model(request):
                 if count_file == int(counts[file_index]):
                     count_file = 0
                     file_index =file_index+1
-        # folders=[]
-        # page_load_json['model_id'] = tm.model_id
-        # for class_name in folder_name:
-        #     get_details=pd.DataFrame.from_records(FilesForTrainingModel.objects.filter(model_name__exact = model_name).exclude(is_trained = True).filter(folder_name__exact = class_name).values())
-        #     get_details=get_details.rename(columns={"file_name": "filename"})
-        #     files_json=json.loads(get_details[[ 'filename', 'extracted_text']].to_json(orient='records'))
-        #     folders.append({'foldername':class_name,'files':files_json})
-        # page_load_json['Folders']=folders
-        # resp = req.post(training_url, json=page_load_json)
-        # FilesForTrainingModel.objects.filter(model_name__exact = model_name).exclude(is_trained = True).update(is_trained = True)
-        resp = req.post('localhost:5000/extract-data', json={'model_id':tm.model_id})
-        print(resp)
-        return render(request, 'model_progress.html', context={})
+        req.get('http://127.0.0.1:5000/extract-data/'+str(tm.model_id))
+        return render(request, 'model_progress.html', context={'msg':'Model Training is in Progress'})
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])

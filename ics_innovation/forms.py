@@ -17,8 +17,8 @@ class Uploadfiles(forms.ModelForm):
         # f_name= re.sub('[&]',' ',instance.media.file._get_name())
         instance.file_path = os.path.join(Path(__file__).parent, "static/files/"+f_name.replace(" ", "_"))
         print(instance.file_path)
-        instance.is_extracted  = False
-        instance.is_trained  = False
+        instance.is_extracted  = 'False'
+        instance.is_trained  = 'False'
         instance.staticpath = "files/"+f_name.replace(" ", "_")
         if commit:
             instance.save()
