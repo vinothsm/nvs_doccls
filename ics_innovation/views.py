@@ -307,16 +307,18 @@ def upload_files_for_training_model(request):
                 if count_file == int(counts[file_index]):
                     count_file = 0
                     file_index =file_index+1
-        folders=[]
-        page_load_json['model_id'] = tm.model_id
-        for class_name in folder_name:
-            get_details=pd.DataFrame.from_records(FilesForTrainingModel.objects.filter(model_name__exact = model_name).exclude(is_trained = True).filter(folder_name__exact = class_name).values())
-            get_details=get_details.rename(columns={"file_name": "filename"})
-            files_json=json.loads(get_details[[ 'filename', 'extracted_text']].to_json(orient='records'))
-            folders.append({'foldername':class_name,'files':files_json})
-        page_load_json['Folders']=folders
-        resp = req.post(training_url, json=page_load_json)
-        FilesForTrainingModel.objects.filter(model_name__exact = model_name).exclude(is_trained = True).update(is_trained = True)
+        # folders=[]
+        # page_load_json['model_id'] = tm.model_id
+        # for class_name in folder_name:
+        #     get_details=pd.DataFrame.from_records(FilesForTrainingModel.objects.filter(model_name__exact = model_name).exclude(is_trained = True).filter(folder_name__exact = class_name).values())
+        #     get_details=get_details.rename(columns={"file_name": "filename"})
+        #     files_json=json.loads(get_details[[ 'filename', 'extracted_text']].to_json(orient='records'))
+        #     folders.append({'foldername':class_name,'files':files_json})
+        # page_load_json['Folders']=folders
+        # resp = req.post(training_url, json=page_load_json)
+        # FilesForTrainingModel.objects.filter(model_name__exact = model_name).exclude(is_trained = True).update(is_trained = True)
+        resp = req.post('localhost:5000/extract-data', json={'model_id':tm.model_id})
+        print(resp)
         return render(request, 'model_progress.html', context={})
     return Response(status=status.HTTP_400_BAD_REQUEST)
 

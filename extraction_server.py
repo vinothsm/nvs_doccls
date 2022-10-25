@@ -9,7 +9,7 @@ app = Flask(__name__)
 def text_extraction_process():
     # db = sql.get_db()
     with sql.engine.connect() as con:
-        objs = con.execute("select * from ics_innovation_filefortrainingmodel where is_extracted='False'")
+        objs = con.execute("select * from ics_innovation_filesfortrainingmodel where is_trained='False'")
         for obj in objs:
             print(obj)
             extracted_text = get_fulltext_from_pdf(obj.file_path)
@@ -19,4 +19,5 @@ def text_extraction_process():
 
 @app.route("/extract-data")
 def extract_data():
+    text_extraction_process()
     return make_response(jsonify({"message": "Hello"}), 200)
