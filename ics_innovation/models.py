@@ -43,12 +43,13 @@ class FilesForTrainingModel(models.Model):
     file_path = models.CharField(null=False, max_length=100)
     file_name = models.CharField(null=False, max_length=100)
     media = models.FileField(null=False, blank=True, upload_to="files")
-    extracted_text = models.TextField(null=False)
+    extracted_text = models.TextField(null=True)
     staticpath = models.CharField(null=True, max_length=100) 
     folder_name = models.CharField(null=True, max_length=100) 
     model_name = models.CharField(null=True, max_length=100) 
     model_id = models.IntegerField(default=-1)
     is_trained = models.CharField(max_length=100,default='False') 
+    is_extracted = models.CharField(max_length=100,default='False') 
 
     def __str__(self) -> str:
         return super().__str__()

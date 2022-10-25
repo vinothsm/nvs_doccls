@@ -104,8 +104,10 @@ dist
 .tern-port
 __pycache__/
 **/__pycache__/
+**/__pycache__/**.pyc
 **/**/__pycache__/
 *.pyc[cod]
+*.py[cod]
 **/migrations/
 
 *.pdf

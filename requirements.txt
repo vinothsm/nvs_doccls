@@ -6,3 +6,6 @@ docx2txt
 django-node-assets
 docx2pdf
 pandas
+flask
+sqlalchemy
+requests
