@@ -20,6 +20,7 @@ from .extractor import get_fulltext_from_pdf
 from .forms import Uploadfiles
 from .models import FilesForTrainingModel,TrainedModel
 import pandas as pd
+from .worker import start_extraction
 
 env = "prod"
 doc_list= []
@@ -309,7 +310,14 @@ def upload_files_for_training_model(request):
                 if count_file == int(counts[file_index]):
                     count_file = 0
                     file_index =file_index+1
-        req.get('http://127.0.0.1:5000/extract-data/'+str(tm.model_id))
+        # req.get('http://127.0.0.1:5000/extract-data/'+str(tm.model_id))
+        import time
+        start_time = time.time()
+        print("#"*10)
+        start_extraction(str(tm.model_id))
+        print("#"*10)
+        end_time = time.time()
+        print("Time taken to execute submit", (end_time - start_time))
         return render(request, 'model_progress.html', context={'msg':'Model Training is in Progress'})
     return Response(status=status.HTTP_400_BAD_REQUEST)
 

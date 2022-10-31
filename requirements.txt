@@ -9,3 +9,4 @@ pandas
 flask
 sqlalchemy
 requests
+dramatiq[redis, watch]
