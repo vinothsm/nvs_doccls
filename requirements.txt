@@ -1,12 +1,11 @@
 django
 django-rest-framework
-python-docx
-pymupdf
-docx2txt
 django-node-assets
+python-docx
+pymupdf==1.20.2
+docx2txt==0.8
 docx2pdf
 pandas
-flask
 sqlalchemy
 requests
-dramatiq[redis, watch]
+dramatiq[redis, watch]==1.13.0

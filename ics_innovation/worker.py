@@ -1,5 +1,5 @@
 from .database import engine
-from extractor import get_fulltext_from_pdf
+from .extractor import get_fulltext_from_pdf
 import requests as req
 import dramatiq
 from dramatiq.brokers.redis import RedisBroker

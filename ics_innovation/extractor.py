@@ -101,15 +101,15 @@ def get_text_from_file(file):
         isPDF = True
         doc = fitz.open(file)
         pipdf2 = fitz.open(file)
-        page = pipdf2.loadPage(0)
-        page2 = pipdf2.loadPage(len(pipdf2)-1)
-        block = page.getText("blocks")
-        pdf_content = page.getText()
+        page = pipdf2.load_page(0)
+        page2 = pipdf2.load_page(len(pipdf2)-1)
+        block = page.get_text("blocks")
+        pdf_content = page.get_text()
         if(len(pipdf2)>1):
-            block2 = page2.getText("blocks")
-            page2 = pipdf2.loadPage(len(pipdf2)-1)
-            block = block + page2.getText("blocks")
-            pdf_content = pdf_content + page2.getText()
+            block2 = page2.get_text("blocks")
+            page2 = pipdf2.load_page(len(pipdf2)-1)
+            block = block + page2.get_text("blocks")
+            pdf_content = pdf_content + page2.get_text()
 
     
     elif actual_fname[1] == '.msg':
@@ -160,7 +160,7 @@ def get_fulltext_from_pdf(file):
         pages=""
         doc = fitz.open(file)
         for page in range(0,len(doc)):
-            pages=pages+doc.loadPage(page).getText()
+            pages=pages+doc.load_page(page).get_text()
         total_data = pages 
         # print(total_data)
         write_to_text(file, total_data)
@@ -175,9 +175,9 @@ def get_pagetext_from_pdf(file,page_no):
         pages=""
         doc = fitz.open(file)
         if len(doc)>1 and (len(doc)-1 != page_no):
-            page = doc.loadPage(page_no)
-            block = page.getText("blocks")
-            pdf_content = page.getText()
+            page = doc.load_page(page_no)
+            block = page.get_text("blocks")
+            pdf_content = page.get_text()
             # print(pdf_content)
             write_to_text(file, pdf_content)
             return pdf_content
@@ -185,9 +185,9 @@ def get_pagetext_from_pdf(file,page_no):
             # print("No text")
             write_to_text(file, "No text")
             return ""
-        #page = doc.loadPage(page_no)
-        #block = page.getText("blocks")
-        #pdf_content = page.getText()
+        #page = doc.load_page(page_no)
+        #block = page.get_text("blocks")
+        #pdf_content = page.get_text()
         #return pdf_content
 
 def get_first_page_text(file):
@@ -195,8 +195,8 @@ def get_first_page_text(file):
     if actual_fname[1] == '.pdf':
         pages=""
         doc = fitz.open(file)
-        page = doc.loadPage(0)
-        total_data = page.getText()
+        page = doc.load_page(0)
+        total_data = page.get_text()
         # print(total_data)
         write_to_text(file, total_data)
         return total_data 
@@ -209,8 +209,8 @@ def get_first_page_text_percentage(file, percentage):
     if actual_fname[1] == '.pdf':
         pages=""
         doc = fitz.open(file)
-        page = doc.loadPage(0)
-        total_data = page.getText()
+        page = doc.load_page(0)
+        total_data = page.get_text()
         # print(total_data)
         write_to_text(file, total_data)
         return total_data
