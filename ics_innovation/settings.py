@@ -22,7 +22,7 @@ MEDIA_URL = "uploads/"
 
 
 NODE_PACKAGE_MANAGER_EXECUTABLE = "/opt/homebrew/bin/npm"
-NODE_MODULES_ROOT = str(BASE_DIR) +'/node_modules'
+NODE_MODULES_ROOT = str(BASE_DIR) + '/node_modules'
 NODE_PACKAGE_JSON = str(BASE_DIR) + '/package.json'
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 15  # 15M

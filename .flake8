@@ -1,0 +1,2 @@
+[flake8]
+excluded = __pycache__,migrations
