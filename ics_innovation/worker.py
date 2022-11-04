@@ -3,6 +3,7 @@ from .extractor import get_fulltext_from_pdf
 import requests as req
 import dramatiq
 from dramatiq.brokers.redis import RedisBroker
+from .variables import urls_obj
 
 redis_broker = RedisBroker(host="localhost", port=6379)
 dramatiq.set_broker(redis_broker)
@@ -28,7 +29,7 @@ def text_extraction_process(model_id):
         for k,v in folder_names.items():
             page_load_json['Folders'].append({'foldername':k,'files':v})
         page_load_json['name_of_the_model'] = model_name
-        # training_url='http://10.185.56.168:8051/training'
+        # training_url=urls_obj["training"]
         # resp = req.post(training_url, json=page_load_json)
         # con.execute('update  ics_innovation_filesfortrainingmodel set is_trained = "True"  where model_id = "{0}"'.format(model_id))
         # print(resp)

@@ -8,4 +8,6 @@ docx2pdf
 pandas
 sqlalchemy
 requests
+gevent == 22.10.1
 dramatiq[redis, watch]==1.13.0
+python-dotenv==0.21.0

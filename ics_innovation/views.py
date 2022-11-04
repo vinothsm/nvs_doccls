@@ -21,55 +21,9 @@ from .forms import Uploadfiles
 from .models import FilesForTrainingModel,TrainedModel
 import pandas as pd
 from .worker import start_extraction
+from .variables import modal_classifications, env, selected_document_details, urls_obj
 
-env = "prod"
-doc_list= []
-selected_document_details={}
-modal_classifications={
-       'General Classification':['Clinical Reports',
-                                    'Communication',
-                                    'Contact Tracing',
-                                    'Diagnostics',
-                                    'Drug Targets',
-                                    'Education',
-                                    'Effect on Medical Specialties',
-                                    'Forecasting & Modelling',
-                                    'Health Policy',
-                                    'Healthcare Workers',
-                                    'Imaging',
-                                    'Immunology',
-                                    'Inequality',
-                                    'Infection Reports',
-                                    'Long Haul',
-                                    'Medical Devices',
-                                    'Misinformation',
-                                    'Model Systems & Tools',
-                                    'Molecular Biology',
-                                    'Non-human',
-                                    'Non-medical',
-                                    'Pediatrics',
-                                    'Prevalence',
-                                    'Prevention',
-                                    'Psychology',
-                                    'Recommendations',
-                                    'Risk Factors',
-                                    'Surveillance',
-                                    'Therapeutics',
-                                    'Transmission',
-                                    'Vaccines'],
-        'Clinical Document Classification':['Additional Monitoring Activity [Site Handover Form]',
-                                    'Checklist [Full Protocol Package (FPP)]',
-                                    'DSUR Report Body',
-                                    'Informed Consent Form',
-                                    'Investigators Brochure',
-                                    'Monitoring Visit Report',
-                                    'Pre Trial Monitoring Report',
-                                    'Protocol',
-                                    'Ready-to-Initiate-Sites (RIS) checklist',
-                                    'Study Table',
-                                    'Summary of Clinical Efficacy',
-                                    'Trial Initiation Monitoring Report']
-   }
+
 @api_view(["GET"])
 def get_extracted_data(request):
     if env == "prod":
@@ -90,10 +44,9 @@ def get_extracted_data(request):
             # obj["file_text"] =obj["file_text"][:500]
             modal_name=obj["model"]
             op.append(obj)
-        url = "http://10.185.56.168:8053/classification"
+        url = urls_obj["classification"]
         if modal_name not in list(modal_classifications.keys()):
-             url = 'http://10.185.56.168:8051/model_prediction'
-        # jjj =[{'file_id': '1234', 'file_text': 'A recent cluster of pneumonia cases in Wuhan, China, was caused by a novel betacoronavirus, the 2019 novel coronavirus (2019-nCoV). We report the epidemiological, clinical, laboratory, and radiological characteristics and treatment and clinical outcomes of these patients. All patients with suspected 2019-nCoV were admitted to a designated hospital', 'model_name': 'auto_train_model'}, {'file_id': '5678', 'file_text': 'In children, SARS-CoV-2 infection is usually asymptomatic or causes a mild illness of short duration. ', 'model_name': 'auto_train_model'}]
+             url = urls_obj["model_prediction"]
         resp=req.post(url,json=op)
         resp_json = resp.json()
         for _file in resp_json:
@@ -136,8 +89,7 @@ def get_latest_req(request):
             op.append(json.loads(json.dumps(item.data))[0])
         return Response(data={'files':op,'entities':req_object.entities})
 
-
-
+@api_view(['GET'])
 def get_modal_details(request):
    context={}
    if request.method == "GET":
@@ -151,7 +103,7 @@ def get_modal_details(request):
             context['details_list']=list(set(get_details['folder_name'].tolist()))
    return JsonResponse(context)
 
-
+@api_view(['GET'])
 def get_document_preview_file(request):
     context={}
     if request.method == "GET":
@@ -177,15 +129,10 @@ def upload_page(request):
         file_objs = []
         modal_names=",".join(request.POST.getlist("entities"))
         for myfile in request.FILES.getlist('media'):
-            # myfile = inmemory_obj.file
             fs = FileSystemStorage() #defaults to   MEDIA_ROOT 
             filename = fs.save(myfile.name.replace(" ", "_"), myfile)
             file_url = fs.url(filename)
             file_ = os.path.join(Path(__file__).parent, "static/"+filename)
-            # if(".docx" in filename):
-            #     file_ = get_converted_file(file_)
-            #     filename = filename.replace(".docx", ".pdf")
-            #     file_url = file_url.replace(".docx", ".pdf")
             file_serializer = FileSerializer(data={"file_path": file_url,'file_name':filename})
             if(file_serializer.is_valid(raise_exception=True)):
                 print("valid one")
@@ -212,6 +159,7 @@ def upload_page(request):
         })
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
 def get_preview(request):
     return render(request, 'ui_preview_page_d1.html', {})
 
@@ -256,22 +204,12 @@ def get_form(request):
         })
     return render(request, "form.html", {"urls": []})
 
-# def get_document_preview_file(request):
-#     context={}
-#     if request.method == "GET":
-#         param = request.GET
-#         document_name = param['document_name']
-#         context['document_path']=selected_document_details[document_name]
-#     return JsonResponse(context)
-
 @api_view(['GET', 'POST'])
-
 def train_model(request):
     return render(request, 'ui_upload_document_types.html', {})
 
 
 @api_view(['GET', 'POST'])
-
 def model_status(request):
     return render(request, 'model_progress.html', {})
 
@@ -294,10 +232,6 @@ def upload_files_for_training_model(request):
         count_file=0
         file_index=0
         files_=request.FILES.getlist('media')
-        page_load_json={
-                    'name_of_the_model' :model_name,
-                    "Folders" :[]
-                    }
         for  file in files_:
             request.POST.setlist('folder_name',[folder_name[file_index]])
             request.POST.setlist('model_id',[tm.model_id])
@@ -310,7 +244,6 @@ def upload_files_for_training_model(request):
                 if count_file == int(counts[file_index]):
                     count_file = 0
                     file_index =file_index+1
-        # req.get('http://127.0.0.1:5000/extract-data/'+str(tm.model_id))
         import time
         start_time = time.time()
         print("#"*10)
@@ -323,6 +256,6 @@ def upload_files_for_training_model(request):
 
 @api_view(["GET"])
 def status_check(request):
-    resp = req.get('http://10.185.56.168:8051/status_check')
+    resp = req.get(urls_obj["status_check"])
     print('resp.text',resp.text)
     return JsonResponse({'msg':resp.text})
