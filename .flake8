@@ -1,2 +1,6 @@
 [flake8]
-excluded = __pycache__,migrations
+exclude = 
+    ics_innovation/__pycache__,
+    ics_innovation/migrations,
+    env
+max-line-length=99

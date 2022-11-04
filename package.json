@@ -20,5 +20,9 @@
     "bootstrap": "^4.6.1",
     "jquery": "^3.5.1",
     "underscore": "^1.13.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.26.0",
+    "eslint-config-google": "^0.14.0"
   }
 }
