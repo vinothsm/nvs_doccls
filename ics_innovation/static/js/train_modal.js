@@ -9,7 +9,6 @@ $('body')
         document.getElementById('upload-docs').disabled = false;
       }
     })
-
     .on('click', '.upload-docs-fields', function(e) {
       const add_doc_type_fields=$('.additional-add-document-type.d-none');
       if (add_doc_type_fields.length>0) {

@@ -25,12 +25,9 @@ urlpatterns = [
     path("", views.upload_page, name="home"),
     path("extracted_data/", views.get_extracted_data, name="review_page"),
     path("get_modal_details/", views.get_modal_details),
-    path("latest_req/", views.get_latest_req),
-    path("form/", views.get_form),
-    path("get_document/", views.get_document_preview_file),
-    path("preview/", views.get_preview),
-    path("train_model/", views.train_model),
-    path("model_status/", views.model_status),
+    path("preview/", views.get_preview_page),
+    path("train_model/", views.train_model_page),
+    path("model_status/", views.model_status_page),
     path("status_check/", views.status_check),
     path("submit_files/", views.upload_files_for_training_model)
 ]

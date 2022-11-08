@@ -1,24 +1,17 @@
-from .convert_to_pdf import get_converted_file
-from django.http import FileResponse, JsonResponse
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import render
 import requests as req
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
-from django.conf import settings
-import shutil
 import os
 from pathlib import Path
 from .serializers import FileSerializer, RequestSerializer, FilesUploadedPerReqSerializer, FileTextSerializer
-from .models import OnlyFile, FilesUploadedPerReq, OnlyRequest, FileText
-from rest_framework.response import Response
+from .models import OnlyFile, FilesUploadedPerReq, OnlyRequest, FileText,FilesForTrainingModel, TrainedModel
 import json
 from django.core.files.storage import FileSystemStorage
 from .extractor import get_fulltext_from_pdf
 from .forms import Uploadfiles
-from .models import FilesForTrainingModel, TrainedModel
 import pandas as pd
 from .worker import start_extraction
 from .variables import modal_classifications, env, selected_document_details, urls_obj
@@ -110,24 +103,6 @@ def get_extracted_data(request):
 
 
 @api_view(['GET'])
-def get_latest_req(request):
-    if request.method == "GET":
-        req_object = OnlyRequest.objects.latest("created")
-        req_id = req_object.request_id
-        req_objs = FilesUploadedPerReq.objects.filter(req_id=req_id)
-        serializer = FilesUploadedPerReqSerializer(req_objs, many=True)
-        all_entries = json.loads(json.dumps(serializer.data))
-        op = []
-        for entry in all_entries:
-            item = FileSerializer(
-                OnlyFile.objects.filter(
-                    file_id=entry['file_id']),
-                many=True)
-            op.append(json.loads(json.dumps(item.data))[0])
-        return Response(data={'files': op, 'entities': req_object.entities})
-
-
-@api_view(['GET'])
 def get_modal_details(request):
     context = {}
     if request.method == "GET":
@@ -145,21 +120,9 @@ def get_modal_details(request):
     return JsonResponse(context)
 
 
-@api_view(['GET'])
-def get_document_preview_file(request):
-    context = {}
-    if request.method == "GET":
-        param = request.GET
-        document_name = param['document_name']
-        context['document_path'] = selected_document_details[document_name]
-    return JsonResponse(context)
-
-
 @api_view(["GET", "POST"])
 def upload_page(request):
     if request.method == "GET":
-        # delete_all_files()
-        # context = {}
         get_details = pd.DataFrame.from_records(
             TrainedModel.objects.all().values())
         trained_model = ''
@@ -212,60 +175,17 @@ def upload_page(request):
 
 
 @api_view(['GET'])
-def get_preview(request):
+def get_preview_page(request):
     return render(request, 'ui_preview_page_d1.html', {})
 
 
-def delete_all_files():
-    file_folder_path = os.path.join(Path(__file__).parent, "static/files/")
-    folder_exists = os.path.isdir(file_folder_path)
-    if folder_exists:
-        shutil.rmtree(file_folder_path)
-
-
 @api_view(['GET', 'POST'])
-def get_form(request):
-    if request.method == "POST":
-        urls_list = []
-        file_objs = []
-        for myfile in request.FILES.getlist('media'):
-            # myfile = inmemory_obj.file
-            fs = FileSystemStorage()  # defaults to   MEDIA_ROOT
-            filename = fs.save(myfile.name, myfile)
-            file_url = fs.url(filename)
-            urls_list.append(file_url)
-            print(file_url)
-            file_serializer = FileSerializer(data={"file_path": file_url})
-            if (file_serializer.is_valid(raise_exception=True)):
-                print("valid one")
-                file_obj = file_serializer.save()
-                file_objs.append(file_obj)
-                print(file_obj)
-        req_serializer = RequestSerializer(data={})
-        req_obj = {}
-        if (req_serializer.is_valid(raise_exception=True)):
-            req_obj = req_serializer.save()
-        for file_obj in file_objs:
-            fupr_serializer = FilesUploadedPerReqSerializer(data={
-                "req_id": req_obj.request_id, "file_id": file_obj.file_id
-            })
-            if (fupr_serializer.is_valid(raise_exception=True)):
-                fupr_serializer.save()
-        # print(FilesUploadedPerReq.objects.get({"req_id": req_obj.request_id}))
-
-        return render(request, 'form.html', {
-            'urls': urls_list
-        })
-    return render(request, "form.html", {"urls": []})
-
-
-@api_view(['GET', 'POST'])
-def train_model(request):
+def train_model_page(request):
     return render(request, 'ui_upload_document_types.html', {})
 
 
 @api_view(['GET', 'POST'])
-def model_status(request):
+def model_status_page(request):
     return render(request, 'model_progress.html', {})
 
 
@@ -291,21 +211,21 @@ def upload_files_for_training_model(request):
         tm = TrainedModel(model_name=model_name)
         tm.save()
         counts = request.POST.getlist('count')
-        count_file = 0
         file_index = 0
         files_ = request.FILES.getlist('media')
-        for file in files_:
-            request.POST.setlist('folder_name', [folder_name[file_index]])
-            request.POST.setlist('model_id', [tm.model_id])
-            request.FILES.setlist('media', [file])
-            form = Uploadfiles(request.POST, request.FILES)
-            if form.is_valid():
-                form = form.save()
-                form.save()
-                count_file = count_file + 1
-                if count_file == int(counts[file_index]):
-                    count_file = 0
-                    file_index = file_index + 1
+        while len(counts)>0:
+            folder_files = files_[:int(counts[0])]
+            files_ = files_[int(counts[0]):]
+            for  file in folder_files:
+                request.POST.setlist('folder_name',[folder_name[file_index]])
+                request.POST.setlist('model_id',[tm.model_id])
+                request.FILES.setlist('media',[file])
+                form = Uploadfiles(request.POST, request.FILES)
+                if form.is_valid():
+                    form = form.save()
+                    form.save()
+            counts = counts[1:]
+            file_index = file_index + 1
         import time
         start_time = time.time()
         print("#" * 10)
@@ -321,5 +241,6 @@ def upload_files_for_training_model(request):
 @api_view(["GET"])
 def status_check(request):
     resp = req.get(urls_obj["status_check"])
-    print('resp.text', resp.text)
-    return JsonResponse({'msg': resp.text})
+    if resp.status_code == 200:
+        return JsonResponse({'msg': resp.text})
+    return JsonResponse({'msg': 'err'})

@@ -11,7 +11,6 @@ $('body')
     .on('input', '#file', function(e) {
       fileList = this.files;
       file=fileList[0];
-      console.log(fileList);
       drag_drop_area.classList.add('active');
       showFile();
     })
@@ -21,8 +20,12 @@ $('body')
       if (is_trained == 'trained') {
         $.get('status_check', function(data) {
           if (data.msg!='completed') {
+            var msg='Model Training is in Progress'
+            if(data.msg == 'err'){
+              msg='Analytics API is down'
+            }
             $('#alert_limit').modal('show');
-            $('.alert-popup-body').text('Model Training is in Progress');
+            $('.alert-popup-body').text(msg);
           } else {
             const selected_card= cuurent_ele.attributes['data-class']['value'];
             $(`.card.model-card`).removeClass('selected');
