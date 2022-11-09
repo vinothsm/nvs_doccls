@@ -23,7 +23,7 @@ def text_extraction_process(model_id):
                 'False', model_id))
         for obj in objs:
             print("@" * 10)
-            print(obj)
+            print(obj.file_id)
             print("#" * 10)
             model_name = obj.model_name
             extracted_text = get_fulltext_from_pdf(obj.file_path)
@@ -42,13 +42,13 @@ def text_extraction_process(model_id):
         for k, v in folder_names.items():
             page_load_json['Folders'].append({'foldername': k, 'files': v})
         page_load_json['name_of_the_model'] = model_name
-        # training_url=urls_obj["training"]
-        # resp = req.post(training_url, json=page_load_json)
-        # con.execute('update  ics_innovation_filesfortrainingmodel set is_trained = "True"  where model_id = "{0}"'.format(model_id))
-        # print(resp)
-        print(page_load_json)
-
+        training_url=urls_obj["training"]
+        resp = req.post(training_url, json=page_load_json)
+        con.execute('update  ics_innovation_filesfortrainingmodel set is_trained = "True"  where model_id = "{0}"'.format(model_id))
+        print(resp)
 
 def start_extraction(model_id):
     text_extraction_process.send(model_id)
+    # text_extraction_process(model_id)
+
     return {"message": "successfully submited the request", "code": 200}
